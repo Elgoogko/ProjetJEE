@@ -30,6 +30,7 @@
 |---------|-------------|
 | `desc/` | Contient les ressources pédagogiques : diapositives, diagrammes UML, documentation technique, etc. Ces fichiers **ne sont pas utilisés directement par le code**. |
 | `springBoot/` | Contient les microservices Spring Boot. Chaque microservice est un projet Maven indépendant. |
+| `springBoot/Starters/` | Contient les méthodes pour démmarer plus facilement le projet en entier |
 
 ---
 
@@ -55,3 +56,25 @@
 ```bash
 git clone [URL_DU_DEPOT]
 cd [NOM_DU_PROJET]
+
+### 2. Démarrer le projet
+Naviger dans le dossier `springBoot/Starters/`
+
+#### Pour Windows
+Démmarer le projet
+```bash
+./start.bat
+
+Arrêter le projet 
+```bash
+./stop.bat
+
+#### Pour Linux
+```bash
+./start.sh
+
+Arrêter le projet 
+```bash
+./stop.sh
+
+**Attention : utilisé le stop.bat / stop.sh va arrêter tous les processus Java de la machine, qu'ils fassent partie du projet ou non**
