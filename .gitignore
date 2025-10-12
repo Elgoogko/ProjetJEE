@@ -1,0 +1,9 @@
+# Fichiers de configuration IDE (IntelliJ, Eclipse, VSCode, etc.)
+.idea/
+*.iml
+*.ipr
+*.iws
+.classpath
+.project
+.settings/
+.vscode/
