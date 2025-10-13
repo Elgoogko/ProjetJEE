@@ -79,6 +79,7 @@ chmod +x start.sh
 chmod +x stop.sh
 ```
 
+Démarer le projet
 ```bash
 ./start.sh
 ```
