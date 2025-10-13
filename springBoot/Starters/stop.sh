@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Lire les PIDs depuis le fichier
-PID_FILE="java_pids.txt"
+PID_FILE="../../java_pids.txt"
 
 if [ -f "$PID_FILE" ]; then
     while read -r pid; do

@@ -8,14 +8,14 @@ cd ".."
 
 # Lister tous les dossiers dans le répertoire courant (sauf start.sh)
 for dir in */; do
-    if [ "$dir" != "./" ] && [ "$dir" != "../" ]; then
+    if [ "$dir" != "./" ] && [ "$dir" != "../" ] && [ "$dir" != "Starters" ]; then
         (cd "$dir" && mvn spring-boot:run > /dev/null 2>&1 & echo $! >> "../$PID_FILE" &)
-    if [ "$dir" == "main"]; then
-        echo "Démmarage du serveur"
-        sleep 5
-    else
-        echo "Démarrage du microservice : $dir"
-    fi
+        if [ "$dir" == "main" ]; then
+            echo "Démmarage du serveur"
+            sleep 5
+        else
+            echo "Démarrage du microservice : $dir"
+        fi
     fi
 done
 
