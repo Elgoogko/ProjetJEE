@@ -70,6 +70,12 @@ Arrêter le projet
 ./stop.bat
 
 #### Pour Linux
+
+Mettre en executable les fichier start.sh et stop.sh
+```bash
+chmod +x start.sh
+chmod +x stop.sh
+
 ```bash
 ./start.sh
 
