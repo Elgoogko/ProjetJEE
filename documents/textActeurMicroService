@@ -1,0 +1,24 @@
+
+
+Un acteur est une entité autonome.
+Un acteur est une boite noir.
+Un acteur peu communiquer avec les autres acteurs soit par envoie de message soit par reception de msg
+
+Un micro service sera un conteneneur d'acteur de meme type
+Un acteur est une instance d'une class java qui implemente une interface acteur (a nous de la definir (l'interface acteur)) contient au moins la signature de la méthode onReceive
+chaque class Java qui implemente cette interface, doit redefinir la methode onReceive la methode
+
+un acteur peut communiquer avec des acteur intra micro service ou inter micro service
+
+1 se former par rapport aux concepts de spring boot
+2 choisir une application justifiée
+3 conception de votre plateforme
+
+
+
+rendu slides
+1 slides sur un concept avancé utilisé
+2 eme partie application presenter (1 slide)
+Architecture et interaction
+automatiser les test
+
