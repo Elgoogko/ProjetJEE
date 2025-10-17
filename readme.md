@@ -90,3 +90,17 @@ Arrêter le projet
 ```
 
 **Attention : utilisé le stop.bat / stop.sh va arrêter tous les processus Java de la machine, qu'ils fassent partie du projet ou non**
+
+## Actors System
+
+Le systeme d'acteurs est composé de 2 acteurs qui sont Film et Client.
+La ligne de compilation actuelle dans le dossier actors :
+```bash
+javac -d classes *.java
+```
+
+Et la compilation en .jar
+```bash
+# Se placer dans le dossier racine du projet
+jar cf actor.jar -C classes .
+```
