@@ -1,2 +1,3 @@
 enlever les film.java et client.java de acteur et les mettre dans les microservice respectif
 rename les micro service en client et film
+changer le start.sh pour cp les class et les mettres dans les microservices
