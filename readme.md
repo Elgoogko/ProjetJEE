@@ -102,5 +102,6 @@ javac -d classes *.java
 Et la compilation en .jar
 ```bash
 # Se placer dans le dossier racine du projet
+javac -d classes *.java
 jar cf actor.jar -C classes .
 ```

@@ -1,5 +1,14 @@
 #!/bin/bash
 
+#compilation de actor
+
+# se placer dans le bon dossier
+# rm -rf classes
+# rm -f Actor.jar
+# mkdir -p classes
+# javac -d classes *.java
+# jar cf Actor.jar -C classes .
+
 # Créer un fichier pour stocker les PIDs des processus Java
 PID_FILE="java_pids.txt"
 rm -f "$PID_FILE"

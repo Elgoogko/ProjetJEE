@@ -61,6 +61,13 @@ interface Actor {
     public void createNewActor();
 
     /**
+     * Delete of a subACtor
+     * At ovverride with the actor structur in actor
+     * write a method to remove id
+     */
+    public void deleteActor();
+
+    /**
      * Check if there is an actor who have this id
      * 
      * @param id which want to know if there is an actor with it
