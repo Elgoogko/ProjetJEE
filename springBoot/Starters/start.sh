@@ -3,6 +3,12 @@
 #compilation de actor
 
 # se placer dans le bon dossier
+cd ".."
+cd ".."
+cd "actorsJava"
+./compile.sh
+# a placer au bon endroit
+cp Actor.jar "../springBoot"
 # rm -rf classes
 # rm -f Actor.jar
 # mkdir -p classes
