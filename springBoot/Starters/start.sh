@@ -15,11 +15,12 @@ cp Actor.jar "../springBoot"
 # javac -d classes *.java
 # jar cf Actor.jar -C classes .
 
+
+cd ".."
+cd "springBoot"
 # Créer un fichier pour stocker les PIDs des processus Java
 PID_FILE="java_pids.txt"
 rm -f "$PID_FILE"
-
-cd ".."
 
 # Lister tous les dossiers dans le répertoire courant (sauf start.sh)
 for dir in */; do
