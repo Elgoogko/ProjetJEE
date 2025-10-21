@@ -1,3 +1,5 @@
 enlever les film.java et client.java de acteur et les mettre dans les microservice respectif
 rename les micro service en client et film
 changer le start.sh pour cp les class et les mettres dans les microservices
+faut-il faire des return boolean sur les send et receive des actor pour verifier en cas d'erreur ???
+faut-il mettre un return boolean sur la creation de sous acteur (si on veut limiter le nombre de sous acteur par ex)

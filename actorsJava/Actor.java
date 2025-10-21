@@ -57,15 +57,21 @@ interface Actor {
      * Creattion of a subACtor
      * At ovverride with the actor structur in actor
      * write a method to generate new id
+     * 
+     * @return true if the actor is correctly created, false if not
      */
-    public void createNewActor();
+    public boolean createNewSubActor();
 
     /**
      * Delete of a subACtor
      * At ovverride with the actor structur in actor
      * write a method to remove id
+     * 
+     * @param id of actor to remove
+     * @return true if the actor is correctly delete, false else
+     * 
      */
-    public void deleteActor();
+    public boolean deleteSubActor(int id);
 
     /**
      * Check if there is an actor who have this id
@@ -73,7 +79,7 @@ interface Actor {
      * @param id which want to know if there is an actor with it
      * @return true if there is an actor who have id  in this obkectb type
      */
-    public boolean thisIdExist(int id);
+    public boolean thisSubActorExist(int id);
 
     /**
      * getter of id
