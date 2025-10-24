@@ -8,7 +8,9 @@ cd ".."
 cd "actorsJava"
 ./compile.sh
 # a placer au bon endroit
-cp Actor.jar "../springBoot"
+cp Actor.jar "../springBoot/main/libs"
+cp Actor.jar "../springBoot/MSFilm/libs"
+cp Actor.jar "../springBoot/serviceb/libs"
 # rm -rf classes
 # rm -f Actor.jar
 # mkdir -p classes
