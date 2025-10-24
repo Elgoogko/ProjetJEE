@@ -1,8 +1,22 @@
 package com.msfilm.msfilm;
 
+import java.util.*;
 import com.actor.*;
 
-public class dflkgdj implements Actor{
+
+/**
+ * Singleton actor
+ * 
+ * 
+ */
+public class MainFilm implements Actor{
+
+    private int id;
+    private ArrayList<Actor> lstFilm;
+
+    public MainFilm(){
+        this.id = 0; // on lui met l'id 0
+    }
 
     @Override
     public void sendWithActor(String message, Actor actor){
@@ -42,7 +56,7 @@ public class dflkgdj implements Actor{
 
     @Override
     public int getId(){
-        return 1;
+        return this.id;
     }
     
 }
