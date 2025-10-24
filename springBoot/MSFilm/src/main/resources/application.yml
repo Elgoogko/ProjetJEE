@@ -1,5 +1,5 @@
 spring:
   application:
-    name: servicea
+    name: msfilm
 server:
   port: 8081
