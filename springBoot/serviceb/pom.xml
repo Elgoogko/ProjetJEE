@@ -45,6 +45,15 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>com.actor</groupId>
+			<artifactId>actor</artifactId>
+			<version>1.0.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/libs/Actor.jar</systemPath>
+		</dependency>
+		
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>

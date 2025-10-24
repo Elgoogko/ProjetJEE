@@ -1,3 +1,5 @@
+package com.actor;
+
 /**
  * 
  * Interface Actor
@@ -8,7 +10,7 @@
  * So id allow to just take id get more information or specific information later
  * 
  */
-interface Actor {
+public interface Actor {
 
     /**
      * 
