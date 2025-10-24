@@ -1,13 +1,13 @@
-package com.serviceb.serviceb;
+package com.msclient.msclient;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ServicebApplication {
+public class MSClientApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ServicebApplication.class, args);
+		SpringApplication.run(MSClientApplication.class, args);
 	}
 
 }
