@@ -1,4 +1,4 @@
-package com.servicea.servicea;
+package com.msfilm.msfilm;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
