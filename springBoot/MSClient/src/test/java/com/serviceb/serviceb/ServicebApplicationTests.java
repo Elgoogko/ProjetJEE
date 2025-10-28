@@ -1,10 +1,10 @@
-package com.serviceb.serviceb;
+package com.msclient.msclient;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ServicebApplicationTests {
+class MSClientApplicationTests {
 
 	@Test
 	void contextLoads() {

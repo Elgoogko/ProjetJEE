@@ -1,4 +1,4 @@
-package com.serviceb.serviceb;
+package com.msclient.msclient;
 
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClient;
 
 @RestController
-public class ServiceBRestController {
+public class MSClientRestController {
 
 	private final DiscoveryClient discoveryClient;
 	private final RestClient restClient;
 
-	public ServiceBRestController(DiscoveryClient discoveryClient, RestClient.Builder restClientBuilder) {
+	public MSClientRestController(DiscoveryClient discoveryClient, RestClient.Builder restClientBuilder) {
 		this.discoveryClient = discoveryClient;
 		restClient = restClientBuilder.build();
 	}

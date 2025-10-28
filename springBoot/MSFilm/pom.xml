@@ -48,8 +48,8 @@
 
 		<dependency>
 			<groupId>com.actor</groupId>
-			<artifactId>actor</artifactId>
-			<version>1.0.0</version>
+			<artifactId>actor-interface</artifactId>
+			<version>1.0</version>
 		</dependency>
 
 	</dependencies>

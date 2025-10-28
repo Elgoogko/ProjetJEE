@@ -44,10 +44,8 @@
 
 		<dependency>
 			<groupId>com.actor</groupId>
-			<artifactId>actor</artifactId>
-			<version>1.0.0</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/libs/Actor.jar</systemPath>
+			<artifactId>actor-interface</artifactId>
+			<version>1.0</version>
 		</dependency>
 
 	</dependencies>

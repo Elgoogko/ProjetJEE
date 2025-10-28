@@ -2,7 +2,7 @@ package com.msfilm.msfilm;
 
 import com.actor.*;
 
-public class dflkgdj implements Actor{
+public class MainFilm implements Actor{
 
     @Override
     public void sendWithActor(String message, Actor actor){
