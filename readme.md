@@ -116,3 +116,9 @@ Et finir par :
 ```bash
 mvn clean compile
 ```
+
+Sinon, pour éxécuter compile.bat / compile.sh partout, il suffit d'utiliser Docker (si disponible sur le système)
+```batch
+docker build -t actor-build .
+docker run --rm -v %cd%:/app actor-build
+```
