@@ -31,4 +31,6 @@ timeout /t 5 >nul
 start "" "http://localhost:8761/"
 
 :: Afficher un message pour arrêter les services
-echo Pour arrêter tous les microservices, exécutez : stop.bat
+echo Pour arrêter tous les microservices, faite ENTREZ
+pause
+./stop.bat
