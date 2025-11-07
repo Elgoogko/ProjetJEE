@@ -3,12 +3,12 @@ package com.msfilm.film;
 import com.actor.Actor;
 
 public class Film implements Actor {
-    private Integer idFilm;
+    private String idFilm;
     private String title;
     private String description;
     private float score;
 
-    public Film(Integer id, String title, String description, float score){
+    public Film(String id, String title, String description, float score){
         this.idFilm = id;
         this.title = title;
         this.description=description;

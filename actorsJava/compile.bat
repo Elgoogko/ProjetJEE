@@ -73,7 +73,8 @@ for /d %%d in ("%PROJECT_PATH%\springBoot\*") do (
             exit /b 1
         )
         echo Compilation Maven dans %%d...
-        call mvn clean compile 2>&1 | findstr /r /c:"BUILD SUCCESS" /c:"BUILD FAILURE" /c:"Total time:"
+        call mvn clean compile 2>&1 
+        ::| findstr /r /c:"BUILD SUCCESS" /c:"BUILD FAILURE" /c:"Total time:"
         if errorlevel 1 (
             echo ERREUR : BUILD FAILURE lors de la compilation Maven dans %%d.
             pause
