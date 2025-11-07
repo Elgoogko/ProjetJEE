@@ -9,7 +9,7 @@ public class Client implements Actor {
     private Role role;
 
     public Client(int idSession, int id, String pseudo, Role role) {
-        this.idSession = idSession;
+        this.idSession = -1;
         this.id = id;
         this.pseudo = pseudo;
         this.role = Role.USER;
