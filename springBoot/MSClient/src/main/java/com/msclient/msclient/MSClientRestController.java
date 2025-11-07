@@ -19,11 +19,11 @@ public class MSClientRestController {
 
 	@GetMapping("helloEureka")
 	public String helloWorld() {
-		ServiceInstance serviceInstance = discoveryClient.getInstances("servicea").get(0);
-		String serviceAResponse = restClient.get()
+		ServiceInstance serviceInstance = discoveryClient.getInstances("msfilm").get(0);
+		String msFIlmResponse = restClient.get()
 				.uri(serviceInstance.getUri() + "/helloWorld")
 				.retrieve()
 				.body(String.class);
-		return serviceAResponse;
+		return msFIlmResponse;
 	}
 }
