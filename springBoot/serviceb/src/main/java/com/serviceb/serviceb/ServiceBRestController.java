@@ -19,7 +19,7 @@ public class ServiceBRestController {
 
 	@GetMapping("helloEureka")
 	public String helloWorld() {
-		ServiceInstance serviceInstance = discoveryClient.getInstances("servicea").get(0);
+		ServiceInstance serviceInstance = discoveryClient.getInstances("msfilm").get(0);
 		String serviceAResponse = restClient.get()
 				.uri(serviceInstance.getUri() + "/helloWorld")
 				.retrieve()
