@@ -1,6 +1,6 @@
-enlever les film.java et client.java de acteur et les mettre dans les microservice respectif
 rename les micro service en client et film
 faut-il faire des return boolean sur les send et receive des actor pour verifier en cas d'erreur ???
 faut-il mettre un return boolean sur la creation de sous acteur (si on veut limiter le nombre de sous acteur par ex)
 adapter le compile.bat en compile.sh
 essayer de faire fonctionner le dockerFile pour : compiler Actor.jar et pour lancer tout le projet, quelque soit la machine
+mettre le mainfilm en singleton

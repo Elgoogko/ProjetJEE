@@ -8,7 +8,7 @@ public class MSFilmRestController {
 
 	@GetMapping("/helloWorld")
 	public String helloWorld() {
-
+		System.out.println("Test 1 2");
 		return "Hello world from Service A!";
 	}
 
