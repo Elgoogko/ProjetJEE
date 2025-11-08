@@ -1,6 +1,5 @@
 package com.msfilm.msfilm;
 
-import java.net.FileNameMap;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -16,7 +15,6 @@ public class MainFilm implements Actor{
     private ArrayList<Film> listFilm = null;
     private static Actor instance = new MainFilm(); // thread-safe method
     private static DOE doeInstance = DOE.getInstance();
-    private String currentSearch = "";
 
     /**
      * Singleton methode
@@ -52,7 +50,6 @@ public class MainFilm implements Actor{
      * @return an Actor of type movie
      */
     public Actor searchFilm(String movieName){
-        this.currentSearch = movieName;
         try {
             Map<String, Object> movie = doeInstance.getFilm(movieName);
             Film newMovie = new Film(getUniqueID(), movie);

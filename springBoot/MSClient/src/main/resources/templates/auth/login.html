@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Connexion</title>
+</head>
+<body>
+
+<!-- Formulaire de connexion -->
+<div id="loginForm">
+    <h1>Connexion</h1><br>
+    <form method="POST" action="login">
+
+        <div id="inputUsernameDiv">
+            <label for="inputUsername"> Pseudonyme</label><br>
+            <input type="text" name="username" id="inputUsername" placeholder="Entrez votre pseudonyme" required>
+        </div>
+        
+        <div id="inputPasswordDiv">
+            <label for="inputPassword"> Mot de passe</label><br>
+            <input type="password" name="password" id="inputPassword" placeholder="Entrez votre mot de passe" required>
+        </div>
+
+        <div id="sendLoginButtonDiv">
+            <input type="submit" class ="button" value="Envoyer">
+        </div>
+
+    </form>
+</div>
+
+<p>Vous n'avez pas encore de compte ? <a href="register.html">Inscrivez-vous ici</a></p>
+
+</body>
+</html>
