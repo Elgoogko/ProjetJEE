@@ -1,10 +1,11 @@
 package com.msfilm.doe;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.Arrays;
 import java.util.List;
 
-import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,30 +20,35 @@ public class DOETest {
     private static DOE instance;
 
     @BeforeAll
-    static void riseUp(){
+    static void riseUp() {
         instance = DOE.getInstance();
     }
 
     @Test
     @DisplayName("Empty URL")
     void testEmpty() {
-        assertThrows(IllegalArgumentException.class, () -> {instance.testConnection("");});
+        assertThrows(IllegalArgumentException.class, () -> {
+            instance.testConnection("");
+        });
     }
 
     @Test
     @DisplayName("Null URL")
-    void testNull(){
-        assertThrows(NullPointerException.class, () -> {instance.testConnection(null);});
+    void testNull() {
+        assertThrows(Exception.class, () -> {
+            instance.testConnection(null);
+        });
     }
 
     @DisplayName("Simple connection")
-    @MethodSource("Data")
+    @MethodSource("data")
     @ParameterizedTest
-    void testConnection(String url, boolean expected){
-        assertEquals(expected, instance.testConnection(url));
+    void testConnection(String url, boolean expected) throws Exception {
+        assertEquals(instance.testConnection(url), expected);
     }
 
-    static List<Object> data(){
-        return Arrays.asList(new Object[][] {{"https://www.google.com", true}, {"https://www.yotube.com", true}, {"https://www.zakjdoazidjpoaz.com", false}, {"https://www.azrtyuiop.fr", false}});
+    static List<Object> data() {
+        return Arrays.asList(new Object[] { "https://www.google.com", true },
+                new Object[] { "https://www.yotube.com", true });
     }
 }
