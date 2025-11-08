@@ -6,7 +6,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class DOE {
@@ -42,6 +41,7 @@ public class DOE {
         if (link == "") {
             throw new IllegalArgumentException("Link can't be empty to test connection");
         }
+
         URL url = new URL(link);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
@@ -66,8 +66,8 @@ public class DOE {
      * @param filmName
      * @return
      */
-    private String constructUrl(String filmName){
-        return linkToOMDB + this.apiKey + "&"+filmName;
+    private String constructUrl(String filmName) {
+        return linkToOMDB + this.apiKey + "&t="+filmName;
     }
 
     /**
@@ -98,6 +98,10 @@ public class DOE {
 
     @SuppressWarnings({ "deprecation" })
     public Map<String, Object> getFilm(String filmName) throws Exception {
+        if (filmName == null || filmName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Le nom du film ne peut pas être null ou vide.");
+        }
+
         URL url = new URL(this.constructUrl(filmName));
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
@@ -105,7 +109,7 @@ public class DOE {
         conn.setReadTimeout(5000);
         
         StringBuilder response = readJson(conn);
-
+        
         conn.disconnect();
         
         Map<String, Object> jsonMap = parseJson(response);

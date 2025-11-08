@@ -16,7 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.msfilm.msfilm.MSFilmApplication;
 
 @SpringBootTest(classes = MSFilmApplication.class)
-public class DOETest {
+public class DOEconnectionTest {
     private static DOE instance;
 
     @BeforeAll
@@ -44,7 +44,7 @@ public class DOETest {
     @MethodSource("data")
     @ParameterizedTest
     void testConnection(String url, boolean expected) throws Exception {
-        assertEquals(instance.testConnection(url), expected);
+        assertEquals(expected, instance.testConnection(url));
     }
 
     static List<Object> data() {
