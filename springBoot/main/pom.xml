@@ -42,11 +42,13 @@
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>com.actor</groupId>
-			<artifactId>actor-interface</artifactId>
-			<version>1.0</version>
-		</dependency>
+        <dependency>
+            <groupId>com.actor</groupId>
+            <artifactId>Actor</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/../../actorsJava/Actor.jar</systemPath>
+        </dependency>
 
 	</dependencies>
 	<dependencyManagement>
