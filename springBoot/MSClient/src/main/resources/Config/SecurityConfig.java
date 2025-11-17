@@ -1,3 +1,5 @@
+package com.example.msclient.config;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -68,8 +70,9 @@ public class SecurityConfig{
                     auth.anyRequest().authenticated(); // Toute les autres requêtes nécessitent authentification
                 })
                 .formLogin(login -> login // Configuration du login via un formulaire
-                        .loginPage("/login")
-                        .successHandler(loginSuccessHandler) // Redirection vers l'accueil après authentification
+                        .loginPage("/auth/login")
+                        .loginProcessingUrl("/auth/login")
+                        .defaultSuccessUrl("/home",true) // Redirection vers l'accueil après authentification
                         .permitAll()
                 )
                 .logout(logout -> logout
