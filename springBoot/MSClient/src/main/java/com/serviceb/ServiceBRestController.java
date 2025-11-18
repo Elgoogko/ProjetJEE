@@ -1,4 +1,4 @@
-package com.serviceb.serviceb;
+package com.serviceb;
 
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;

@@ -1,4 +1,4 @@
-package com.serviceb.serviceb;
+package com.serviceb;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
