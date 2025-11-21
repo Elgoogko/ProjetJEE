@@ -1,4 +1,4 @@
-package com.msclient.msclient;
+package MSClient.src.main.java.com.msclient.msclient;
 
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;

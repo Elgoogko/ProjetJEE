@@ -75,7 +75,7 @@ public class DOE {
         // --- 3. Parse le JSON en Map ---
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> jsonMap = mapper.readValue(response.toString(), Map.class);
-
+        //Map<String, Object> jsonMap = null;
         return jsonMap;
     }
 }
