@@ -1,18 +1,34 @@
 package com.msfilm.film;
 
+import java.util.Map;
+
 import com.actor.Actor;
 
 public class Film implements Actor {
-    private String idFilm;
-    private String title;
-    private String description;
+    /**
+     * Actor ID : used to identify the actor during his lifecycle
+     */
+    private int idActor;
+
+    /**
+     * Movie Score : ratings based on our own data base (not imdb score provided in the data)
+     * TODO create a score scale
+     */
     private float score;
 
-    public Film(String id, String title, String description, float score){
-        this.idFilm = id;
-        this.title = title;
-        this.description=description;
-        this.score=score;
+    /**
+     * Raw movie Data 
+     */
+    private Map<String, Object> moviedata;
+    
+    public Film(int idActor, Map<String, Object> movieData) {
+        this.idActor = idActor;
+        this.moviedata = movieData;
+        this.score = 0; // TODO connect h2 data base and update this score according to the database 
+    }
+
+    private Object getMovieProperty(String nameProperty){
+        return this.moviedata.get(nameProperty);
     }
 
     @Override
@@ -27,8 +43,7 @@ public class Film implements Actor {
 
     @Override
     public int getId() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getId'");
+        return this.idActor;
     }
 
     @Override
@@ -63,7 +78,7 @@ public class Film implements Actor {
 
     @Override
     public String toString(){
-        return "Film id: "+this.idFilm+"; Title: "+this.title+"; Desc.: "+this.description+"; Score : "+this.score;
+        return "Film id: "+this.idActor+"; \nTitle: "+getMovieProperty("Title")+"; \nDesc.: "+getMovieProperty("Description")+"; Score : "+this.score;
     }
     
 }
