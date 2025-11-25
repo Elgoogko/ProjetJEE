@@ -11,23 +11,23 @@ public class Film implements Actor {
     private int idActor;
 
     /**
-     * Movie Score : ratings based on our own data base (not imdb score provided in the data)
-     * TODO create a score scale
+     * Movie Score : ratings based on our own data base (not imdb score provided in
+     * the data)
      */
     private float score;
 
     /**
-     * Raw movie Data 
+     * Raw movie Data
      */
     private Map<String, Object> moviedata;
-    
+
     public Film(int idActor, Map<String, Object> movieData) {
         this.idActor = idActor;
         this.moviedata = movieData;
-        this.score = 0; // TODO connect h2 data base and update this score according to the database 
+        this.score = 0; // TODO connect h2 data base and update this score according to the database
     }
 
-    private Object getMovieProperty(String nameProperty){
+    private Object getMovieProperty(String nameProperty) {
         return this.moviedata.get(nameProperty);
     }
 
@@ -77,8 +77,9 @@ public class Film implements Actor {
     }
 
     @Override
-    public String toString(){
-        return "Film id: "+this.idActor+"; \nTitle: "+getMovieProperty("Title")+"; \nDesc.: "+getMovieProperty("Description")+"; Score : "+this.score;
+    public String toString() {
+        return "Film id: " + this.idActor + "; \nTitle: " + getMovieProperty("Title") + "; \nDesc.: "
+                + getMovieProperty("Description") + "; Score : " + this.score;
     }
-    
+
 }
