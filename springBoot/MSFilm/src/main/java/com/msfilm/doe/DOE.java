@@ -4,9 +4,10 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONObject;
 
 public class DOE {
     private static DOE instance = new DOE("f9a63c9c"); // Thread-safe method
@@ -87,13 +88,13 @@ public class DOE {
         return response;
     }
 
-    @SuppressWarnings("unchecked")
     private Map<String, Object> parseJson(StringBuilder jsonData) throws Exception{
-        ObjectMapper mapper = new ObjectMapper();
-        Map<String, Object> jsonMap;
-        jsonMap = mapper.readValue(jsonData.toString(), Map.class);
-        return jsonMap;
-        
+        JSONObject jsonObject = new JSONObject(jsonData.toString());
+        Map<String, Object> jsonMap = new HashMap<>();
+        for (String key : jsonObject.keySet()) {
+            jsonMap.put(key, jsonObject.get(key));
+        }
+    return jsonMap;
     }
 
     @SuppressWarnings({ "deprecation" })

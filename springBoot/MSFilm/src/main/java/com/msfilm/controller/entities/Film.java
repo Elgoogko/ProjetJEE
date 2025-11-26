@@ -1,35 +1,41 @@
-package com.msfilm.film;
+package com.msfilm.controller.entities;
 
 import java.util.Map;
 
 import com.actor.Actor;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Film implements Actor {
     /**
      * Actor ID : used to identify the actor during his lifecycle
      */
+    @NotNull
+    @NotEmpty
     private int idActor;
 
     /**
      * Movie Score : ratings based on our own data base (not imdb score provided in the data)
-     * TODO create a score scale
      */
+    @NotEmpty
+    @NotNull
     private float score;
 
     /**
      * Raw movie Data 
      */
+    @NotEmpty(message = "Données invalides !")
+    @NotNull(message = "Données invalides !")
     private Map<String, Object> moviedata;
-    
-    public Film(int idActor, Map<String, Object> movieData) {
-        this.idActor = idActor;
-        this.moviedata = movieData;
-        this.score = 0; // TODO connect h2 data base and update this score according to the database 
-    }
-
-    private Object getMovieProperty(String nameProperty){
-        return this.moviedata.get(nameProperty);
-    }
 
     @Override
     public boolean createNewSubActor() {
@@ -78,7 +84,7 @@ public class Film implements Actor {
 
     @Override
     public String toString(){
-        return "Film id: "+this.idActor+"; \nTitle: "+getMovieProperty("Title")+"; \nDesc.: "+getMovieProperty("Description")+"; Score : "+this.score;
+        return "Film id: "+this.idActor+"; \nTitle: "+moviedata.get("Title")+"; \nDesc.: "+moviedata.get("Description")+"; Score : "+this.score;
     }
     
 }

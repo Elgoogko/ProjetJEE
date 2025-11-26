@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import com.actor.*;
+import com.msfilm.controller.entities.Film;
 import com.msfilm.doe.DOE;
-import com.msfilm.film.Film;
 
 /**
  * This class handle the search, the creation and the destruction of Actor of type "Film"
@@ -13,14 +13,14 @@ import com.msfilm.film.Film;
 public class MainFilm implements Actor{
     
     private ArrayList<Film> listFilm = null;
-    private static Actor instance = new MainFilm(); // thread-safe method
+    private static MainFilm instance = new MainFilm(); // thread-safe method
     private static DOE doeInstance = DOE.getInstance();
 
     /**
      * Singleton methode
      * @return unique instance of MainFilm
      */
-    public static Actor getInstance(){
+    public static MainFilm getInstance(){
         if(instance == null){
             instance = new MainFilm();
         }
@@ -52,7 +52,7 @@ public class MainFilm implements Actor{
     public Actor searchFilm(String movieName){
         try {
             Map<String, Object> movie = doeInstance.getFilm(movieName);
-            Film newMovie = new Film(getUniqueID(), movie);
+            Film newMovie = new Film(getUniqueID(), 0, movie);
             listFilm.add(newMovie);
             return newMovie;
         } catch (Exception e) {

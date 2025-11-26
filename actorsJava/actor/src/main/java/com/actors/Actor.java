@@ -1,8 +1,8 @@
-package com.actor;
+package com.actors;
 
 /**
  * 
- * Interface Actor
+ * Abstarct class Actor
  * 
  * Setup id to allow interaction with a micro service wich don't know a speficif
  * actor
@@ -13,31 +13,29 @@ package com.actor;
  * later
  * 
  */
-public interface Actor {
-    /**
-     * 
-     * 
-     * static idList; structur of id with subactor if there is subactor
-     * int id; id of the actor
-     * 
-     */
+public abstract class Actor {
 
     /**
-     * Send a message to a specific actor
-     * 
-     * @param message
-     * @param actor
+     * Unique ID of each actors choosen by the actor manager
      */
-    public void sendWithActor(String message, Actor actor);
+    private String id;
 
     /**
-     * Receive message from a specific actor
-     * 
-     * @param message
-     * @param actor
+     * Lifetime left of the Actor in ms
      */
-    public void receiveWithActor(String message, Actor actor);
+    private long lifetime = 5000;
 
+    /**
+     * Setter for lifetime, used to reduce the lifetime or give it more time
+     * @param lf lifetime in ms 
+     */
+    public void setLifetime(long lf){
+        this.lifetime = lf;
+    }
+
+    public long getLifetime(){
+        return this.lifetime;
+    }
     /**
      * 
      * Send message to an actor with his id
@@ -45,7 +43,7 @@ public interface Actor {
      * @param message
      * @param id
      */
-    public void sendWithId(String message, int id);
+    public void send(String message, String id){};
 
     /**
      * 
@@ -54,12 +52,18 @@ public interface Actor {
      * @param message
      * @param id
      */
-    public void receiveWithId(String message, int id);
+    public void receive(String message, String id){};
 
     /**
      * getter of id
      * 
      * @return id of the actor
      */
-    public int getId();
+    public String getId(){
+        return this.id;
+    };
+
+    public void SetID(String id){
+        this.id = id;
+    }
 }

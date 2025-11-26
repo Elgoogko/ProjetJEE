@@ -1,3 +1,4 @@
+package com.msclient.entities;
 
 import java.io.*;
 import java.util.ArrayList;
