@@ -31,7 +31,7 @@ public class Film implements Actor {
     private float score;
 
     /**
-     * Raw movie Data 
+     * Raw movie Data
      */
     @NotEmpty(message = "Données invalides !")
     @NotNull(message = "Données invalides !")
@@ -86,5 +86,5 @@ public class Film implements Actor {
     public String toString(){
         return "Film id: "+this.idActor+"; \nTitle: "+moviedata.get("Title")+"; \nDesc.: "+moviedata.get("Description")+"; Score : "+this.score;
     }
-    
+
 }

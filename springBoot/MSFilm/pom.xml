@@ -33,6 +33,12 @@
 	<dependencies>
 
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
+
+		<dependency>
 			<groupId>org.testifyproject.junit5</groupId>
 			<artifactId>junit5</artifactId>
 			<version>1.0.6</version>
