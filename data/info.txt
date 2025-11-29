@@ -1,0 +1,7 @@
+to connect to the bdd u need to go to :
+http://localhost:8080/h2
+
+at every build the "JDBC URL" reset so replace it with :
+jdbc:h2:./data/demo
+
+once its done use the password and user defined in the "application.properties"
