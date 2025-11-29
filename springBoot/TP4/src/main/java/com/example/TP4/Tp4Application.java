@@ -1,4 +1,4 @@
-package com.example.TP4;
+package TP4.src.main.java.com.example.TP4;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

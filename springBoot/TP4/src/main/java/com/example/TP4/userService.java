@@ -1,4 +1,4 @@
-package com.example.TP4;
+package TP4.src.main.java.com.example.TP4;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
