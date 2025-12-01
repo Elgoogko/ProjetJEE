@@ -10,6 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+
+import org.hibernate.dialect.function.array.ArrayIncludesArgumentValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -41,6 +46,17 @@ public class MSFilmRestController{
 			Film film = (Film) filmAsActor;
             return film;
         } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @GetMapping("/getSearchResultAsJSON")
+    public HashSet<Actor> getSearchResult(@RequestParam String name){
+        try{
+            filmManager.getSeachResult(name);
+            ArrayList<Film> searchResult = new ArrayList<>();
+            return filmManager.getAllActors();
+        } catch (Exception e){
             return null;
         }
     }

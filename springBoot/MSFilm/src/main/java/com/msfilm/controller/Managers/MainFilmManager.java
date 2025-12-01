@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import com.actors.ActorManager;
 import com.msfilm.controller.entities.Film;
+import com.msfilm.controller.entities.CompressedFilm;
 import com.msfilm.doe.DOE;
 import com.msfilm.doe.searchType;
 
@@ -19,8 +20,8 @@ public class MainFilmManager extends ActorManager {
     @Autowired
     private static DOE doeInstance;
 
-    private MainFilmManager() {
-        super(new ActorManager.Builder().actorIdentifier("F").autoID(true).maximumNumberOfActors(100));
+    public MainFilmManager() {
+        super(new ActorManager.Builder().autoID(false).maximumNumberOfActors(100));
     }
 
     /**
@@ -35,12 +36,36 @@ public class MainFilmManager extends ActorManager {
             Map<String, Object> movie = doeInstance.getFilm(movieName, searchType.EXACT_NAME);
             Film newMovie = new Film(0, movie);
             newMovie.setLifetime(25000);
+            newMovie.setID((String)newMovie.getMoviedata().get("imdbID"));
             this.addActor(newMovie);
             return newMovie;
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Film incconu : essayer d'écrire le titre exacte");
+            System.out.println("Film incconu : essayer d'écrire le titre exact");
             return null;
         }
+    }
+
+    public void getSeachResult(String name) {
+        throw new UnsupportedOperationException("Unimplemented method 'getSeachResult'");
+    }
+
+    public Film getFilmByIMDBID(String imdbID){
+        try {
+            Map<String, Object> movie = doeInstance.getFilm(imdbID, searchType.ID);
+            Film newMovie = new Film(0, movie);
+            newMovie.setLifetime(25000);
+            newMovie.setID((String)newMovie.getMoviedata().get("imdbID"));
+            this.addActor(newMovie);
+            return newMovie;
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Film incconu : essayer d'écrire le titre exact");
+            return null;
+        }
+    }
+
+    public Film castCompressedFilmToFilm(CompressedFilm cFilm){
+        return getFilmByIMDBID(cFilm.getImdbID());
     }
 }

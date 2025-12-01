@@ -6,77 +6,74 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
- 
+
 @Component
 public class DOE {
-    /**
-     * Key to access OMDb API
-     */
     private String apiKey = "f9a63c9c";
+    private static final String LINK_TO_OMDB = "http://www.omdbapi.com/?apikey=";
 
     /**
-     * Default beggining of URL
+     * Tests the connection to a given URL.
+     * @param link The URL to test.
+     * @return true if the connection is successful, false otherwise.
+     * @throws Exception If the connection fails.
      */
-    private static String linkToOMDB = "http://www.omdbapi.com/?apikey=";
-
-    /**
-     * Function used to test the connection :
-     * - first to internet (with www.google.com) for exemple
-     * - second, to OMdb API
-     * @param link
-     * @return if the connection can be established
-     */
-    @SuppressWarnings("deprecation")
-    public boolean testConnection(String link) throws Exception {
-        if(link == ""){
+    public boolean testConnection(String link) {
+        if (link == null || link.trim().isEmpty()) {
             throw new IllegalArgumentException("Link can't be empty to test connection");
         }
-        URL url = new URL(link);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("GET");
-        connection.setConnectTimeout(3000);
-        connection.setReadTimeout(3000);
-
-        int statusCode = connection.getResponseCode();
-        connection.disconnect();
-
-        if (statusCode == 200) {
-            return true;
+        try{
+            URL url = new URL(link);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setConnectTimeout(3000);
+            connection.setReadTimeout(3000);
+            int statusCode = connection.getResponseCode();
+            connection.disconnect();
+            return statusCode == 200;
+        } catch (Exception e){
+            return false;
         }
-        return false;
     }
 
     /**
-     * Construct the URL according to parameters apiKey and film name
-     * Exemple :
-     * apikey = 0
-     * filmtitle = A
-     * return : https://www.omdbapi.com/?apikey=0&A
-     * @param filmName an idea, film name or approximate film name
-     * @return
+     * Constructs the URL for the OMDB API based on the search type and parameters.
+     * @param filmName The film name or ID.
+     * @param t The search type (ID, EXACT_NAME, APPX_SEARCH).
+     * @param page The page number for approximate search (optional).
+     * @return The constructed URL.
      */
-    private String constructUrl(String filmName, searchType t) {
+    private String constructUrl(String filmName, searchType t, int... page) {
+        StringBuilder urlBuilder = new StringBuilder(LINK_TO_OMDB + this.apiKey);
+
         switch (t) {
             case ID:
-                return linkToOMDB+this.apiKey+"&i"+filmName+"&type=movie";
-            case APPX_SEARCH:
-                return linkToOMDB+this.apiKey+"&s"+filmName+"&type=movie";
+                urlBuilder.append("&i=").append(filmName).append("&type=movie");
+                break;
             case EXACT_NAME:
-                return linkToOMDB+this.apiKey+"&t"+filmName+"&type=movie";
+                urlBuilder.append("&t=").append(filmName).append("&type=movie");
+                break;
+            case APPX_SEARCH:
+                urlBuilder.append("&s=").append(filmName).append("&type=movie");
+                if (page.length > 0 && page[0] > 1) {
+                    urlBuilder.append("&page=").append(page[0]);
+                }
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid search type");
         }
-        return null;
+        return urlBuilder.toString();
     }
 
     /**
-     * Will read the JSON on the link (conn) and create a entire string from it
-     * @param conn a page sent by OMDB api, 
-     * @return
-     * @throws Exception
+     * Reads the JSON response from the HTTP connection.
+     * @param conn The HTTP connection.
+     * @return The JSON response as a StringBuilder.
+     * @throws Exception If an error occurs while reading the response.
      */
-    private StringBuilder readJson(HttpURLConnection conn) throws Exception{
+    private StringBuilder readJson(HttpURLConnection conn) throws Exception {
         BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
         StringBuilder response = new StringBuilder();
         String line;
@@ -88,12 +85,12 @@ public class DOE {
     }
 
     /**
-     * Cast the string builder into a Java Map
-     * @param jsonData JSON in a string format
-     * @return A cast of the JSON String int a Map
-     * @throws Exception
+     * Parses the JSON string into a Map.
+     * @param jsonData The JSON string.
+     * @return The parsed Map.
+     * @throws Exception If an error occurs while parsing the JSON.
      */
-    private Map<String, Object> parseJson(StringBuilder jsonData) throws Exception{
+    private Map<String, Object> parseJson(StringBuilder jsonData) throws Exception {
         JSONObject jsonObject = new JSONObject(jsonData.toString());
         Map<String, Object> jsonMap = new HashMap<>();
         for (String key : jsonObject.keySet()) {
@@ -101,33 +98,53 @@ public class DOE {
         }
         return jsonMap;
     }
-    
-    /**
-     * 
-     * @param filmName
-     * @param t
-     * @return
-     * @throws Exception
-     */
-    @SuppressWarnings({ "deprecation" })
-    public Map<String, Object> getFilm(String filmName, searchType t) throws Exception {
-        if (filmName == null || filmName.trim().isEmpty()) {
-            throw new IllegalArgumentException("Le nom du film ne peut pas être null ou vide.");
-        }
 
-        URL url = new URL(this.constructUrl(filmName, t));
+    /**
+     * Uses the OMDB API to fetch data.
+     * @param url The URL to fetch data from.
+     * @return The parsed Map from the JSON response.
+     * @throws Exception If an error occurs while fetching or parsing data.
+     */
+    private Map<String, Object> useAPI(URL url) throws Exception {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         conn.setConnectTimeout(5000);
         conn.setReadTimeout(5000);
-        
+
         StringBuilder response = readJson(conn);
-        
         conn.disconnect();
+        return parseJson(response);
+    }
 
-        Map<String, Object> jsonMap = parseJson(response);
+    /**
+     * Fetches a film by its exact name or ID.
+     * @param filmName The film name or ID.
+     * @param t The search type (ID or EXACT_NAME).
+     * @return The film data as a Map.
+     * @throws Exception If an error occurs.
+     */
+    public Map<String, Object> getFilm(String filmName, searchType t) throws Exception {
+        if (filmName == null || filmName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Le nom du film ne peut pas être null ou vide.");
+        }
+        return useAPI(new URL(constructUrl(filmName, t)));
+    }
 
-        return jsonMap;
+    /**
+     * Fetches a list of films based on an approximate search.
+     * @param filmName The approximate film name.
+     * @param page The page number (must be > 1).
+     * @return The search results as a Map.
+     * @throws Exception If an error occurs.
+     */
+    public Map<String, Object> getSearchResult(String filmName, int page)  throws Exception{
+        if (filmName == null || filmName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Le nom du film ne peut pas être null ou vide.");
+        }
+        if (page <= 1) {
+            throw new IllegalArgumentException("La page ne peut pas être <= 1");
+        }
+        return useAPI(new URL(constructUrl(filmName, searchType.APPX_SEARCH, page)));
     }
 
     public void setApiKey(String apiKey) {

@@ -4,6 +4,8 @@ import java.util.Map;
 
 import com.actors.Actor;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -13,14 +15,15 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class Film extends Actor {
     /**
      * Movie Score : ratings based on our own data base (not imdb score provided in the data)
      */
-    @NotEmpty
     @NotNull
+    @Min(0)
+    @Max(5)
     private float score;
 
     /**

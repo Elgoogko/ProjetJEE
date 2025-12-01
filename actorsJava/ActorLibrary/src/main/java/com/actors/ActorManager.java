@@ -36,6 +36,7 @@ public class ActorManager {
      */
     private int maximumNumberOfActor = 1000;
 
+    private int tempTime = 0;
     /**
      * Constructor of class ActorManger uses the Builder Pattern
      * @param builder Builder to call with ActorManager.Builder()
@@ -136,8 +137,9 @@ public class ActorManager {
     /**
      * Update the lifeTime of each actors and delete thoses who has expired
      */
-    @Scheduled(fixedRateString = "${actor.lifetime.check.interval}")
+    @Scheduled(fixedRate = 1000)
     public void checkLifeTime(){
+        if(checkInterval-tempTime <= 0){
         for(Actor a : this.actors){
             a.decrementLifetime(checkInterval);
         }
@@ -146,6 +148,10 @@ public class ActorManager {
         actors.removeIf((a) -> {
             return a.getLifetime() <= 0;
         });
+        tempTime = 0;
+        } else{
+            tempTime = tempTime + 1000; 
+        }
     }
 
     /**
