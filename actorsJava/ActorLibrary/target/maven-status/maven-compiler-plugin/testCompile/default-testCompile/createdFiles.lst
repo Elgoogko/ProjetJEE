@@ -1,0 +1,6 @@
+ActorManager\ActorManagerCheckLifetimeTest.class
+ActorManager\ActorManagerSetAutoID.class
+ActorTest\ActorDecrementTest.class
+ActorTest\ActorParametersTest.class
+ActorManager\ActorManagerAddAndDeleteTest.class
+ActorManager\ActorManagerConstructorTest.class

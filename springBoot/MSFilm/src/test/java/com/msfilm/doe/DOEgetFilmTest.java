@@ -12,20 +12,20 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.msfilm.MSFilmApplication;
 
 @SpringBootTest(classes = MSFilmApplication.class)
 public class DOEgetFilmTest {
+    @Autowired
     private static DOE instance;
+    
     private static Map<String, Object> TEST = new HashMap<>();
 
     @BeforeAll
-     static void riseUp() {
-        instance = DOE.getInstance();
-
-        
+    static void riseUp() {
         TEST.put("Title", "The Avengers");
         TEST.put("Year", "2012");
         TEST.put("Rated", "PG-13");
@@ -64,26 +64,26 @@ public class DOEgetFilmTest {
     @Test
     @DisplayName("Null test")
     void testNull(){
-        assertThrows(IllegalArgumentException.class, () -> {instance.getFilm(null);}); 
+        assertThrows(IllegalArgumentException.class, () -> {instance.getFilm(null, searchType.APPX_SEARCH);}); 
     }
 
     @Test
     @DisplayName("Empty name test")
     void testEmpty(){
-        assertThrows(IllegalArgumentException.class, () -> {instance.getFilm("");});
+        assertThrows(IllegalArgumentException.class, () -> {instance.getFilm("",searchType.APPX_SEARCH);});
     }
 
     
     @Test
     @DisplayName("Blank name test")
     void testBlank(){
-        assertThrows(IllegalArgumentException.class, () -> {instance.getFilm("      ");});
+        assertThrows(IllegalArgumentException.class, () -> {instance.getFilm("      ",searchType.APPX_SEARCH);});
     }
 
     @Test
     @DisplayName("Simple Film  : Avengers")
     void testSimpleFilm() throws Exception {
-        Map<String, Object> result = instance.getFilm("Avengers");
+        Map<String, Object> result = instance.getFilm("Avengers", searchType.APPX_SEARCH);
 
         assertFalse(result.isEmpty());
         // Comparaison clé par clé

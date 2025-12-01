@@ -35,8 +35,6 @@
             <groupId>com.actor</groupId>
             <artifactId>Actor</artifactId>
             <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/../../actorsJava/Actor.jar</systemPath>
         </dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -46,7 +44,7 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 		</dependency>
-
+	
 		<!-- Spring security + Thymeleaf -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -117,7 +115,6 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
-        <sourceDirectory>src</sourceDirectory>
     </build>
 
 </project>

@@ -8,26 +8,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.json.JSONObject;
-
+import org.springframework.stereotype.Component;
+ 
+@Component
 public class DOE {
-    private static DOE instance = new DOE("f9a63c9c"); // Thread-safe method
-    private String apiKey;
-    private static String linkToOMDB = "http://www.omdbapi.com/?apikey=";
+    /**
+     * Key to access OMDb API
+     */
+    private String apiKey = "f9a63c9c";
 
     /**
-     * Singleton method, return the unique instance of DOE
-     * @return
+     * Default beggining of URL
      */
-    public static DOE getInstance() {
-        if (instance == null) {
-            instance = new DOE("f9a63c9c");
-        }
-        return instance;
-    }
-
-    private DOE(String apiKey) {
-        this.apiKey = apiKey;
-    }
+    private static String linkToOMDB = "http://www.omdbapi.com/?apikey=";
 
     /**
      * Function used to test the connection :
@@ -64,11 +57,19 @@ public class DOE {
      * apikey = 0
      * filmtitle = A
      * return : https://www.omdbapi.com/?apikey=0&A
-     * @param filmName
+     * @param filmName an idea, film name or approximate film name
      * @return
      */
-    private String constructUrl(String filmName) {
-        return linkToOMDB + this.apiKey + "&t="+filmName;
+    private String constructUrl(String filmName, searchType t) {
+        switch (t) {
+            case ID:
+                return linkToOMDB+this.apiKey+"&i"+filmName+"&type=movie";
+            case APPX_SEARCH:
+                return linkToOMDB+this.apiKey+"&s"+filmName+"&type=movie";
+            case EXACT_NAME:
+                return linkToOMDB+this.apiKey+"&t"+filmName+"&type=movie";
+        }
+        return null;
     }
 
     /**
@@ -88,22 +89,35 @@ public class DOE {
         return response;
     }
 
+    /**
+     * Cast the string builder into a Java Map
+     * @param jsonData JSON in a string format
+     * @return A cast of the JSON String int a Map
+     * @throws Exception
+     */
     private Map<String, Object> parseJson(StringBuilder jsonData) throws Exception{
         JSONObject jsonObject = new JSONObject(jsonData.toString());
         Map<String, Object> jsonMap = new HashMap<>();
         for (String key : jsonObject.keySet()) {
             jsonMap.put(key, jsonObject.get(key));
         }
-    return jsonMap;
+        return jsonMap;
     }
-
+    
+    /**
+     * 
+     * @param filmName
+     * @param t
+     * @return
+     * @throws Exception
+     */
     @SuppressWarnings({ "deprecation" })
-    public Map<String, Object> getFilm(String filmName) throws Exception {
+    public Map<String, Object> getFilm(String filmName, searchType t) throws Exception {
         if (filmName == null || filmName.trim().isEmpty()) {
             throw new IllegalArgumentException("Le nom du film ne peut pas être null ou vide.");
         }
 
-        URL url = new URL(this.constructUrl(filmName));
+        URL url = new URL(this.constructUrl(filmName, t));
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         conn.setConnectTimeout(5000);
@@ -115,5 +129,9 @@ public class DOE {
         
         Map<String, Object> jsonMap = parseJson(response);
         return jsonMap;
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
     }
 }

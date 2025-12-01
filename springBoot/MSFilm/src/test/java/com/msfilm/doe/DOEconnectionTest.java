@@ -11,18 +11,15 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.msfilm.MSFilmApplication;
 
 @SpringBootTest(classes = MSFilmApplication.class)
 public class DOEconnectionTest {
+    @Autowired
     private static DOE instance;
-
-    @BeforeAll
-    static void riseUp() {
-        instance = DOE.getInstance();
-    }
 
     @Test
     @DisplayName("Empty URL")
