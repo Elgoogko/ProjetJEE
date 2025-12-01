@@ -19,7 +19,8 @@ mkdir -p src/com/actor
 # Compiler les sources avec le package
 javac -d classes src/com/actor/*.java
 
-# Créer le JAR avec la structure de package correcte
+# Créer le JAR avec la structure de package correcte (ajouter le param pour passer en java 17)
+
 jar cf Actor.jar -C classes .
 
 echo "Build completed: Actor.jar"

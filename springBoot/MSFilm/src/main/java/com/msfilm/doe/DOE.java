@@ -26,24 +26,23 @@ public class DOE {
      * Function used to test the connection :
      * - first to internet (with www.google.com) for exemple
      * - second, to OMdb API
-     * 
      * @param link
      * @return if the connection can be established
      */
     @SuppressWarnings("deprecation")
     public boolean testConnection(String link) throws Exception {
-        if (link == "") {
+        if(link == ""){
             throw new IllegalArgumentException("Link can't be empty to test connection");
         }
+        try {
+            URL url = new URL(link);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setConnectTimeout(3000);
+            connection.setReadTimeout(3000);
 
-        URL url = new URL(link);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("GET");
-        connection.setConnectTimeout(3000);
-        connection.setReadTimeout(3000);
-
-        int statusCode = connection.getResponseCode();
-        connection.disconnect();
+            int statusCode = connection.getResponseCode();
+            connection.disconnect();
 
         if (statusCode == 200) {
             return true;
@@ -126,8 +125,11 @@ public class DOE {
         StringBuilder response = readJson(conn);
         
         conn.disconnect();
-        
-        Map<String, Object> jsonMap = parseJson(response);
+
+        // --- 3. Parse le JSON en Map ---
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> jsonMap = mapper.readValue(response.toString(), Map.class);
+
         return jsonMap;
     }
 

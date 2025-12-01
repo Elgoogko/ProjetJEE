@@ -1,14 +1,13 @@
-package com.msclient;
+package TP4.src.main.java.com.example.TP4;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ConfigurableApplicationContext;
 
 @SpringBootApplication
-public class MSClientApplication {
+public class Tp4Application {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MSClientApplication.class, args);
+		SpringApplication.run(Tp4Application.class, args);
 	}
 
 }
