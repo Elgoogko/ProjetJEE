@@ -34,15 +34,14 @@ public class DOE {
         if(link == ""){
             throw new IllegalArgumentException("Link can't be empty to test connection");
         }
-        try {
-            URL url = new URL(link);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            connection.setConnectTimeout(3000);
-            connection.setReadTimeout(3000);
+        URL url = new URL(link);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.setConnectTimeout(3000);
+        connection.setReadTimeout(3000);
 
-            int statusCode = connection.getResponseCode();
-            connection.disconnect();
+        int statusCode = connection.getResponseCode();
+        connection.disconnect();
 
         if (statusCode == 200) {
             return true;
@@ -126,9 +125,7 @@ public class DOE {
         
         conn.disconnect();
 
-        // --- 3. Parse le JSON en Map ---
-        ObjectMapper mapper = new ObjectMapper();
-        Map<String, Object> jsonMap = mapper.readValue(response.toString(), Map.class);
+        Map<String, Object> jsonMap = parseJson(response);
 
         return jsonMap;
     }
