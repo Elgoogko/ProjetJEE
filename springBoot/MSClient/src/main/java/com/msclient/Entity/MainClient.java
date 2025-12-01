@@ -1,19 +1,13 @@
-package com.msclient.Controller.entities;
+package com.msclient.Entity;
+
+import java.util.ArrayList;
 
 import com.actor.Actor;
 
-public class Client implements Actor {
-    private int idSession;
-    private int id;
-    private String pseudo;
-    private Role role;
+public class MainClient implements Actor {
 
-    public Client(int idSession, int id, String pseudo, Role role) {
-        this.idSession = -1;
-        this.id = id;
-        this.pseudo = pseudo;
-        this.role = Role.USER;
-    }
+    private ArrayList<Client> listClient = new ArrayList<Client>();
+    private static int id=1;
 
     @Override
     public void sendWithActor(String s, Actor actor) {
@@ -35,14 +29,6 @@ public class Client implements Actor {
         System.out.println("I DO NOTHIN");
     }
 
-    public int getIdSession() {
-        return idSession;
-    }
-
-    public void setIdSession(int idSession) {
-        this.idSession = idSession;
-    }
-
     public int getId() {
         return this.id;
     }
@@ -62,5 +48,5 @@ public class Client implements Actor {
     public boolean thisSubActorExist(int id){
         return false;
     }
-
+    
 }
