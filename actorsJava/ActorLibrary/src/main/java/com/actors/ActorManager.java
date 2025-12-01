@@ -7,14 +7,39 @@ import com.exceptions.ActorManagerException;
 
 public class ActorManager { 
     
+    /**
+     * List of actors currently up 
+     */
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private HashSet<Actor> actors= new HashSet();
     
+    /**
+     * Sweeper check interval in ms
+     */
     private long checkInterval = 5000;
+
+    /**
+     * Actor identifier at the begining of each actor ID
+     * Works only if autoID is true
+     */
     private String actorIdentifier = "AM";
+
+    /**
+     * True : the actor Manager will create unique ID for each new actors
+     * False :  you have to check and create unique IDs by yourself
+     */
     private boolean autoID = true;
+
+    /**
+     * The maximum number of actors currently up.
+     * It is used to handle infinite loop or bots
+     */
     private int maximumNumberOfActor = 1000;
 
+    /**
+     * Constructor of class ActorManger uses the Builder Pattern
+     * @param builder Builder to call with ActorManager.Builder()
+     */
     protected ActorManager(Builder builder) {
         this.actorIdentifier = builder.actorIdentifier;
         this.checkInterval = builder.checkInterval;
@@ -22,6 +47,10 @@ public class ActorManager {
         this.maximumNumberOfActor = builder.maximumNumberOfActor;
     }
 
+    /**
+     * Create a new unique ID used by the next actors according to the actors currently up
+     * @return a Unique ID
+     */
     private String getUniqueID() {
         int i = 0;
         HashSet<String> tempIDs= new HashSet<>();
@@ -43,6 +72,12 @@ public class ActorManager {
         return actorIdentifier+Integer.toString(i);
     }
 
+    /**
+     * Add an actor to the manager. 
+     * Warning : it means that the actor can be deleted according to the sweeper method !
+     * @param a a valid Actor
+     * @return true if the actor is new, false of it isn't
+     */
     public boolean addActor(Actor a) {
         if(a == null){
             throw new ActorManagerException("Can't add a null object to actors list");
@@ -113,10 +148,25 @@ public class ActorManager {
         });
     }
 
+    /**
+     * The class builde is the main part of the pattern Builder. It is used to handle multiple combinaisons of values without beeing required to create a new Actor Manager
+     */
     public static class Builder {
+        /**
+         * @see actorIdentifier in ActorManager
+         */
         private String actorIdentifier = "AM";
+        /**
+         * @see checkInterval in ActorManager
+         */
         private long checkInterval = 5000;
+        /**
+         * @see autoID in ActorManager
+         */
         private boolean autoID = true;
+           /**
+         * @see maximumNumberOfActor in ActorManager
+         */
         private int maximumNumberOfActor = 1000;
 
         /**
