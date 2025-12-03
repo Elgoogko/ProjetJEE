@@ -2,14 +2,19 @@ package com.msfilm.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import com.actors.Actor;
 import com.msfilm.controller.Managers.MainFilmManager;
 import com.msfilm.controller.entities.Film;
 
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 
 /**
@@ -18,7 +23,11 @@ import org.springframework.web.bind.annotation.RequestParam;
  * Or others MVC pages
  */
 @Controller
+@RestController
 public class MSFilmController {
+
+    @Autowired
+    private RestTemplate restTemplate;
     
     @Autowired
     private MainFilmManager filmManager;
@@ -53,5 +62,26 @@ public class MSFilmController {
             model.addAttribute("success", false);
         }
         return "film";
+    }
+
+    @PostMapping("/receive")
+    public ResponseEntity<String> receiveMessage(@RequestBody MessageDTO message) {
+        System.out.println("MSFilm reçoit du MSClient: " + message.getContent());
+        return ResponseEntity.ok("Message reçu par MSFilm: " + message.getContent());
+    }
+
+    @PostMapping("/send-to-client")
+    public ResponseEntity<String> sendToClient(@RequestBody MessageDTO message) {
+        String msClientUrl = "http://MSCLIENT/api/client/receive";
+        
+        // Envoi du message à MSClient via Eureka
+        ResponseEntity<String> response = restTemplate.postForEntity(
+            msClientUrl, 
+            message, 
+            String.class
+        );
+        
+        return ResponseEntity.ok("Message envoyé à MSClient: " + message.getContent() + 
+                                " - Réponse: " + response.getBody());
     }
 }
