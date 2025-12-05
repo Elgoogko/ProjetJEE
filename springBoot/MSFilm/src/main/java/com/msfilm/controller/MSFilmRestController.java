@@ -4,7 +4,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.actors.*;
 import com.msfilm.controller.Managers.MainFilmManager;
+import com.msfilm.controller.entities.Comment;
 import com.msfilm.controller.entities.Film;
+import com.services.CommentService;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,8 +15,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 
 /**
@@ -23,18 +28,28 @@ import org.springframework.web.bind.annotation.GetMapping;
  */
 @RestController
 @RequestMapping("/api")
-public class MSFilmRestController{
+public class MSFilmRestController {
 
     @Autowired
     private MainFilmManager filmManager;
 
-    @PostMapping("/commentMovie")
-    public String postMethodName(@RequestBody String entity) {        
-        return entity;
+    @Autowired
+    private CommentService commentService;
+
+    @PostMapping("/postComment")
+    public ResponseEntity<String> postComment(@RequestBody Comment entity) {
+        try {
+            commentService.createComment(entity.getIdUser(), entity.getIdMovie(), entity.getComment(),
+                    entity.getScore());
+            return ResponseEntity.ok("OK");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
+        }
     }
 
     /**
      * Return the movie in JSON format
+     * 
      * @param name movie name
      * @return JSON of the actor Movie
      */
@@ -42,7 +57,7 @@ public class MSFilmRestController{
     public Film getMethodName(@RequestParam String name) {
         try {
             Actor filmAsActor = filmManager.getExactFilm(name);
-			Film film = (Film) filmAsActor;
+            Film film = (Film) filmAsActor;
             return film;
         } catch (Exception e) {
             return null;
@@ -50,13 +65,19 @@ public class MSFilmRestController{
     }
 
     @GetMapping("/getSearchResultAsJSON")
-    public HashSet<Actor> getSearchResult(@RequestParam String name){
-        try{
+    public HashSet<Actor> getSearchResult(@RequestParam String name) {
+        try {
             filmManager.getSeachResult(name);
             ArrayList<Film> searchResult = new ArrayList<>();
             return filmManager.getAllActors();
-        } catch (Exception e){
+        } catch (Exception e) {
             return null;
         }
+    }
+
+    @GetMapping("/getComment")
+    public ArrayList<Comment> getComment(@RequestParam Long id) {
+        Optional<Comment> comments = commentService.getComment(id);
+        return null;
     }
 }

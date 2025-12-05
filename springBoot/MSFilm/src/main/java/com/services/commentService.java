@@ -1,6 +1,8 @@
 package com.services;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,7 +11,7 @@ import com.Exceptions.CommentServiceException;
 import com.msfilm.controller.entities.Comment;
 
 @Service
-public class commentService {
+public class CommentService {
 
     @Autowired
     private CommentRepository cr;
@@ -32,5 +34,19 @@ public class commentService {
             throw new CommentServiceException("ID comment cannot be null");
         }
         cr.deleteById(id);
+    }
+
+    public Optional<Comment> getComment(Long id) {
+        if (id == null) {
+            throw new CommentServiceException("ID comment cannot be null");
+        }
+        return cr.findById(id);
+    }
+
+    public List<Comment> getCommentsByFilmID(String filmId) {
+        if (filmId == null) {
+            throw new CommentServiceException("ID comment cannot be null");
+        }
+        return cr.findByIdMovie(filmId);
     }
 }
