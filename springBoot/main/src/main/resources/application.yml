@@ -3,6 +3,7 @@ spring:
     name: eureka-server
 server:
   port: 8761
+  enable-self-preservation: false
 eureka:
   client:
     register-with-eureka: false

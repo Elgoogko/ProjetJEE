@@ -67,7 +67,7 @@ public class MSClientController {
     // Endpoint pour envoyer un message à MSFilm
     @PostMapping("/send-to-film")
     public ResponseEntity<String> sendToFilm(@RequestBody MessageDTO message) {
-        String msFilmUrl = "http://MSFILM/api/film/receive";
+        String msFilmUrl = "http://MSFILM/receive";
         
         ResponseEntity<String> response = restTemplate.postForEntity(
             msFilmUrl, 

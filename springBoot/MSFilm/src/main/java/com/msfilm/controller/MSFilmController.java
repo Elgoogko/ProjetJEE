@@ -24,6 +24,7 @@ import org.springframework.web.client.RestTemplate;
  */
 @Controller
 @RestController
+@RequestMapping("/")
 public class MSFilmController {
 
     @Autowired
@@ -72,7 +73,7 @@ public class MSFilmController {
 
     @PostMapping("/send-to-client")
     public ResponseEntity<String> sendToClient(@RequestBody MessageDTO message) {
-        String msClientUrl = "http://MSCLIENT/api/client/receive";
+        String msClientUrl = "http://MSCLIENT/receive";
         
         // Envoi du message à MSClient via Eureka
         ResponseEntity<String> response = restTemplate.postForEntity(
