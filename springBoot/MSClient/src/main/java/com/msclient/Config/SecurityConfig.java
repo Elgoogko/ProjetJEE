@@ -11,6 +11,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.http.HttpStatus;
 
 import java.util.Arrays;
 
@@ -55,18 +57,87 @@ public class SecurityConfig{
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/auth/**","/h2-console/**")) // Désactivation de la protection CSRF (nécessaire pour H2-Console)
+                .csrf(csrf -> csrf
+                        // Autoriser les endpoints de communication entre microservices SANS CSRF
+                        .ignoringRequestMatchers(
+                                "/auth/**",
+                                "/h2-console/**",
+                                "/receive",          // ← AJOUTÉ: Endpoint pour recevoir des messages
+                                "/send-to-film",     // ← AJOUTÉ: Endpoint pour envoyer des messages
+                                "/test",             // ← AJOUTÉ: Endpoint de test
+                                "/ping",             // ← AJOUTÉ: Health check
+                                "/api/**",           // ← AJOUTÉ: Tous les endpoints API
+                                "/actuator/**"       // ← AJOUTÉ: Pour Eureka health checks
+                        )
+                )
 
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/", "/auth/**").permitAll(); // Pages publiques (sans connexion)
-                    auth.requestMatchers("/admin/**").hasRole("ADMIN"); // Pages dans /admin/ restreintes aux ADMIN et supérieurs
-
-                    auth.anyRequest().authenticated(); // Toutes les autres requêtes nécessitent authentification
+                    // Pages publiques (sans connexion)
+                    auth.requestMatchers("/", "/auth/**").permitAll();
+                    
+                    // Endpoints de communication entre microservices (PUBLICS)
+                    auth.requestMatchers(
+                        "/receive",          // Recevoir des messages de MSFilm
+                        "/send-to-film",     // Envoyer des messages à MSFilm
+                        "/test",             // Test
+                        "/ping",             // Health check simple
+                        "/api/**"            // Tous les endpoints API
+                    ).permitAll();
+                    
+                    // Actuator endpoints pour Eureka (PUBLICS)
+                    auth.requestMatchers("/actuator/**").permitAll();
+                    
+                    // H2 Console (uniquement en développement)
+                    if (isProfileActive("dev") || isProfileActive("test")) {
+                        auth.requestMatchers("/h2-console/**").permitAll();
+                    }
+                    
+                    // Pages dans /admin/ restreintes aux ADMIN et supérieurs
+                    auth.requestMatchers("/admin/**").hasRole("ADMIN");
+                    
+                    // Toutes les autres requêtes nécessitent authentification
+                    auth.anyRequest().authenticated();
                 })
+                
+                // Configuration spéciale pour les requêtes API (microservices)
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        // Pour les requêtes API, retourner 401/403 au lieu de rediriger
+                        .defaultAuthenticationEntryPointFor(
+                                new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED),
+                                request -> request.getHeader("Content-Type") != null && 
+                                          request.getHeader("Content-Type").contains("application/json")
+                        )
+                        // Pour les pages web, rediriger normalement
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            if (request.getHeader("Content-Type") != null && 
+                                request.getHeader("Content-Type").contains("application/json")) {
+                                // Requête API - retourner JSON
+                                response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                                response.setContentType("application/json");
+                                response.getWriter().write("{\"error\":\"Unauthorized\",\"message\":\"Authentication required\"}");
+                            } else {
+                                // Page web - rediriger vers login
+                                response.sendRedirect("/auth/login");
+                            }
+                        })
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            if (request.getHeader("Content-Type") != null && 
+                                request.getHeader("Content-Type").contains("application/json")) {
+                                // Requête API - retourner JSON
+                                response.setStatus(HttpStatus.FORBIDDEN.value());
+                                response.setContentType("application/json");
+                                response.getWriter().write("{\"error\":\"Forbidden\",\"message\":\"Insufficient permissions\"}");
+                            } else {
+                                // Page web - rediriger vers error
+                                response.sendRedirect("/error");
+                            }
+                        })
+                )
+                
                 .formLogin(login -> login // Configuration du login via un formulaire
                         .loginPage("/auth/login")
                         .loginProcessingUrl("/auth/login")
-                        .defaultSuccessUrl("/home",true) // Redirection vers l'accueil après authentification
+                        .defaultSuccessUrl("/home", true) // Redirection vers l'accueil après authentification
                         .permitAll()
                 )
                 .logout(logout -> logout
@@ -75,22 +146,26 @@ public class SecurityConfig{
                         .invalidateHttpSession(true) // Ferme la session
                         .deleteCookies("JSESSIONID") // Suppression des cookies de session
                 )
-                .headers(headers -> headers.frameOptions((frameOptions) -> frameOptions.disable())); // Peut-être nécessaire pour afficher correctement H2-Console
+                
+                // Désactiver frame options pour les requêtes API
+                .headers(headers -> headers
+                        .frameOptions(frameOptions -> frameOptions.disable()) // Pour H2-Console
+                        .contentSecurityPolicy(csp -> csp
+                                .policyDirectives("default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'")
+                        )
+                );
 
         // Gestion de la session utilisateur
         http.sessionManagement(session -> session
                 .invalidSessionUrl("/auth/login?expired=true") // Redirige à la page de connexion si l'utilisateur tente d'accéder à une page protégée avec une session invalide
                 .maximumSessions(1) // Limitation d'une session par utilisateur
-                .expiredUrl("/auth/login?session-expired=true") // Redirige à la page dee connexion quand la session est expirée (timeout/logout)
-        );
-
-        http.exceptionHandling(exceptionHandling -> exceptionHandling
-                .accessDeniedPage("/error") // Redirige les autres erreurs et accès aux pages protégées sans permissions à une page d'erreur
+                .expiredUrl("/auth/login?session-expired=true") // Redirige à la page de connexion quand la session est expirée (timeout/logout)
+                .maxSessionsPreventsLogin(false) // Permettre une nouvelle connexion si session expirée
         );
 
         return http.build();
-
     }
+
 
     /**
      * Utilisation de BCryptPasswordEncoder pour chiffrer les MDP avant le stockage en BDD
@@ -100,5 +175,4 @@ public class SecurityConfig{
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
-
 }

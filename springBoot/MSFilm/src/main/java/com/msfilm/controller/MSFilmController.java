@@ -2,7 +2,7 @@ package com.msfilm.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import com.actors.Actor;
@@ -72,17 +72,54 @@ public class MSFilmController {
     }
 
     @PostMapping("/send-to-client")
-    public ResponseEntity<String> sendToClient(@RequestBody MessageDTO message) {
-        String msClientUrl = "http://MSCLIENT/receive";
+public ResponseEntity<String> sendToClient(@RequestBody MessageDTO message) {
+    System.out.println("🎬 === DÉBUT ENVOI MSFilm → MSClient ===");
+    System.out.println("📤 Message: " + message.getContent());
+    
+    try {
+        // Option 1: Avec Eureka
+        String msClientUrl = "http://msclient/receive";
         
-        // Envoi du message à MSClient via Eureka
+        // Option 2: Direct (test)
+        // String msClientUrl = "http://localhost:8082/receive";
+        
+        System.out.println("🔗 URL utilisée: " + msClientUrl);
+        
+        // Créer les headers explicitement
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<MessageDTO> request = new HttpEntity<>(message, headers);
+        
+        System.out.println("🚀 Envoi de la requête...");
+        
         ResponseEntity<String> response = restTemplate.postForEntity(
             msClientUrl, 
-            message, 
+            request, 
             String.class
         );
         
+        System.out.println("✅ Réponse reçue!");
+        System.out.println("📥 Status: " + response.getStatusCode());
+        System.out.println("📥 Headers: " + response.getHeaders());
+        System.out.println("📥 Body: " + response.getBody());
+        
         return ResponseEntity.ok("Message envoyé à MSClient: " + message.getContent() + 
                                 " - Réponse: " + response.getBody());
+        
+    } catch (Exception e) {
+        System.err.println("❌ ERREUR DÉTAILLÉE:");
+        System.err.println("Type: " + e.getClass().getName());
+        System.err.println("Message: " + e.getMessage());
+        e.printStackTrace();
+        
+        // Afficher la cause racine
+        Throwable cause = e;
+        while (cause.getCause() != null) {
+            cause = cause.getCause();
+            System.err.println("Cause: " + cause.getClass().getName() + " - " + cause.getMessage());
+        }
+        
+        return ResponseEntity.status(500).body("Erreur: " + e.getMessage());
     }
+}
 }
