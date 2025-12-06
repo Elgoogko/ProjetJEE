@@ -56,12 +56,17 @@ public class SecurityConfig{
      */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+        http.headers(headers -> headers
+                .frameOptions(frameOptions -> frameOptions.disable()) // ESSENTIEL pour H2
+        );
+
         http
                 .csrf(csrf -> csrf
                         // Autoriser les endpoints de communication entre microservices SANS CSRF
                         .ignoringRequestMatchers(
                                 "/auth/**",
-                                "/h2-console/**",
+                                "/h2/**",
                                 "/receive",          // ← AJOUTÉ: Endpoint pour recevoir des messages
                                 "/send-to-film",     // ← AJOUTÉ: Endpoint pour envoyer des messages
                                 "/test",             // ← AJOUTÉ: Endpoint de test
@@ -88,9 +93,9 @@ public class SecurityConfig{
                     auth.requestMatchers("/actuator/**").permitAll();
                     
                     // H2 Console (uniquement en développement)
-                    if (isProfileActive("dev") || isProfileActive("test")) {
-                        auth.requestMatchers("/h2-console/**").permitAll();
-                    }
+                    //if (isProfileActive("dev") || isProfileActive("test")) {
+                        auth.requestMatchers("/h2/**").permitAll();
+                    //}
                     
                     // Pages dans /admin/ restreintes aux ADMIN et supérieurs
                     auth.requestMatchers("/admin/**").hasRole("ADMIN");
