@@ -11,12 +11,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
 
 
-@RestController
+@Controller
 @RequestMapping("/")
 public class MSClientController {
 
@@ -59,6 +60,7 @@ public class MSClientController {
 	}
 
 	@PostMapping("/receive")
+	@ResponseBody
     public ResponseEntity<String> receiveMessage(@RequestBody MessageDTO message) {
         System.out.println("MSClient reçoit du MSFilm: " + message.getContent());
         return ResponseEntity.ok("Message reçu par MSClient: " + message.getContent());
@@ -66,6 +68,7 @@ public class MSClientController {
     
     // Endpoint pour envoyer un message à MSFilm
     @PostMapping("/send-to-film")
+	@ResponseBody
     public ResponseEntity<String> sendToFilm(@RequestBody MessageDTO message) {
         String msFilmUrl = "http://msfilm/receive";
         
