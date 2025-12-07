@@ -63,4 +63,12 @@ public class Client implements Actor {
         return false;
     }
 
+    public String getPseudo() {
+        return pseudo;
+    }
+    
+    public Role getRole() {
+        return role;
+    }
+
 }
