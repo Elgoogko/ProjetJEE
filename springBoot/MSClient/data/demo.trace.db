@@ -725,3 +725,6 @@ SELECT * FROM users [42104-232]
 2025-12-07 20:32:49.254212+01:00 jdbc[13]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USERS" not found (this database is empty); SQL statement:
 SELECT * FROM users [42104-232]
+2025-12-08 00:23:35.685922+01:00 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "[*]ACTION_ORIENTATION"; expected "ALTER, ANALYZE"; SQL statement:
+ACTION_ORIENTATION [42001-232]

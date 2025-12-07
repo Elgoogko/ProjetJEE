@@ -8,8 +8,12 @@ import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.http.HttpStatus;
@@ -45,6 +49,30 @@ public class SecurityConfig{
     @Bean
     public RoleHierarchy roleHierarchy(){
         return RoleHierarchyImpl.fromHierarchy("ROLE_DEV > ROLE_ADMIN > ROLE_USER");
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        // Créez des utilisateurs en mémoire pour tester
+        UserDetails user = User.builder()
+                .username("user")
+                .password(passwordEncoder().encode("password")) // Important: encoder le mot de passe
+                .roles("USER")
+                .build();
+        
+        UserDetails admin = User.builder()
+                .username("admin")
+                .password(passwordEncoder().encode("admin123"))
+                .roles("ADMIN", "USER")
+                .build();
+        
+        UserDetails test = User.builder()
+                .username("test")
+                .password(passwordEncoder().encode("test"))
+                .roles("USER")
+                .build();
+        
+        return new InMemoryUserDetailsManager(user, admin, test);
     }
 
     /**
@@ -138,12 +166,14 @@ public class SecurityConfig{
                             }
                         })
                 )
-                
-                .formLogin(login -> login // Configuration du login via un formulaire
-                        .loginPage("/auth/login")
-                        .loginProcessingUrl("/auth/login")
-                        .defaultSuccessUrl("/home", true) // Redirection vers l'accueil après authentification
-                        .permitAll()
+                .formLogin(login -> login
+                    .loginPage("/auth/login")
+                    .loginProcessingUrl("/auth/login")  // IMPORTANT: URL de traitement du formulaire
+                    //.usernameParameter("username")      // Nom du champ username
+                    //.passwordParameter("password")      // Nom du champ password
+                    .defaultSuccessUrl("/main", true)
+                    .failureUrl("/auth/login?error=true")  // URL en cas d'échec
+                    .permitAll()
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout") // URL de déconnexion

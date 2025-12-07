@@ -78,8 +78,19 @@ public class MSClientController {
         return "redirect:/auth/login";
     }
     
-    @RequestMapping("auth/login")
-    public String getLogin() {
+    @GetMapping("auth/login")
+    public String showLoginPage(@RequestParam(value = "error", required = false) String error,
+                                @RequestParam(value = "logout", required = false) String logout,
+                                Model model) {
+        
+        if (error != null) {
+            model.addAttribute("error", "Nom d'utilisateur ou mot de passe incorrect.");
+        }
+        
+        if (logout != null) {
+            model.addAttribute("message", "Vous avez été déconnecté avec succès.");
+        }
+        
         return "auth/login";
     }
 
