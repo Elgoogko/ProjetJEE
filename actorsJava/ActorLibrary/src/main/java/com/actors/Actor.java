@@ -3,6 +3,9 @@ package com.actors;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -73,7 +76,15 @@ public abstract class Actor {
             String timestamp = LocalDateTime.now().format(
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
             );
-            FileWriter fileWriter = new FileWriter(nameClass+this.id+timestamp, true);
+
+            Path path = Paths.get("log/"+nameClass+this.id+timestamp);
+            Path dossierLog = path.getParent();
+            
+            if (dossierLog != null && !Files.exists(dossierLog)) {
+                System.out.println("Création du dossier: " + dossierLog.toAbsolutePath());
+                Files.createDirectories(dossierLog);
+            }
+            FileWriter fileWriter = new FileWriter("log/"+nameClass+"-"+this.id+timestamp, true);
             writer = new PrintWriter(fileWriter);
             
         } catch (IOException e) {
