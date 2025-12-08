@@ -10,13 +10,15 @@ import org.junit.jupiter.api.Test;
 import com.actors.Actor;
 import com.exceptions.ActorException;
 
+import ActorManager.ActorAsClass;
+
 public class ActorParametersTest {
 
     private static Actor instance = null;
     
     @BeforeAll
     public static void riseUp(){
-        instance = new Actor();
+        instance = new ActorAsClass();
     }
 
     @DisplayName("null id")

@@ -14,8 +14,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import com.msclient.CustomUserDetailsService;
-
 import java.util.Arrays;
 
 /**
@@ -66,11 +64,15 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/auth/**", "/h2/**")) // Désactivation de la protection CSRF
-                                                                                  // (nécessaire pour H2-Console)
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/auth/**", "/h2/**", "/pages/**")) // Désactivation de la
+                                                                                               // protection CSRF
+                // (nécessaire pour H2-Console)
 
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/", "/auth/**", "/h2/**").permitAll(); // Pages publiques (sans connexion)
+                    auth.requestMatchers("/", "/auth/**", "/h2/**", "/pages/**", "/pages/*").permitAll(); // Pages
+                                                                                                          // publiques
+                                                                                                          // (sans
+                    // connexion)
                     auth.requestMatchers("/admin/**").hasRole("ADMIN"); // Pages dans /admin/ restreintes aux ADMIN et
                                                                         // supérieurs
 
@@ -79,7 +81,7 @@ public class SecurityConfig {
                 .formLogin(login -> login // Configuration du login via un formulaire
                         .loginPage("/auth/login")
                         .loginProcessingUrl("/auth/login")
-                        .defaultSuccessUrl("/home", true) // Redirection vers l'accueil après authentification
+                        .defaultSuccessUrl("/pages/home", true) // Redirection vers l'accueil après authentification
                         .permitAll())
                 .logout(logout -> logout
                         .logoutUrl("/logout") // URL de déconnexion

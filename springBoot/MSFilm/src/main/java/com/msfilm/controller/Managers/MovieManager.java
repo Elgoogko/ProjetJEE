@@ -10,6 +10,7 @@ import com.msfilm.controller.entities.Film;
 import com.msfilm.controller.entities.CompressedFilm;
 import com.msfilm.doe.DOE;
 import com.msfilm.doe.searchType;
+import com.msfilm.services.CommentService;
 
 /**
  * This class handle the search, the creation and the destruction of Actor of
@@ -19,6 +20,9 @@ import com.msfilm.doe.searchType;
 public class MovieManager extends ActorManager {
     @Autowired
     private DOE doeInstance;
+
+    @Autowired
+    private CommentService commentService;
 
     public MovieManager() {
         super(new ActorManager.Builder().autoID(false).maximumNumberOfActors(100));
@@ -33,7 +37,7 @@ public class MovieManager extends ActorManager {
      */
     public Film getExactFilm(String movieName) throws Exception {
         Map<String, Object> movie = doeInstance.getFilm(movieName, searchType.EXACT_NAME);
-        Film newMovie = new Film(0, movie);
+        Film newMovie = new Film(0, movie, this.commentService);
         this.addActor(newMovie);
         return newMovie;
     }
@@ -46,7 +50,7 @@ public class MovieManager extends ActorManager {
     public Film getFilmByIMDBID(String imdbID) {
         try {
             Map<String, Object> movie = doeInstance.getFilm(imdbID, searchType.ID);
-            Film newMovie = new Film(0, movie);
+            Film newMovie = new Film(0, movie, commentService);
             this.addActor(newMovie);
             return newMovie;
         } catch (Exception e) {

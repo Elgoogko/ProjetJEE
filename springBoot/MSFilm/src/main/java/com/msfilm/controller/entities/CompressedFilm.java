@@ -1,7 +1,8 @@
 package com.msfilm.controller.entities;
 
+import org.json.JSONObject;
+
 import com.actors.Actor;
-import com.actors.Status;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -38,5 +39,16 @@ public class CompressedFilm extends Actor {
     public String toString() {
         return "CompressedFilm [title=" + title + ", releasetYear=" + releasetYear + ", linkToPoster=" + linkToPoster
                 + ", imdbID=" + imdbID + "]";
+    }
+
+    @Override
+    public void receive(JSONObject message, String senderID) {
+        throw new UnsupportedOperationException("Unimplemented method 'receive'");
+    }
+
+    @Override
+    public JSONObject castToJSONObject() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'castToJSONObject'");
     }
 }

@@ -39,7 +39,7 @@ public class AuthController {
 
         userRepository.save(user);
 
-        return "redirect:/home";
+        return "redirect:/pages/home";
     }
 
     @GetMapping("/register")

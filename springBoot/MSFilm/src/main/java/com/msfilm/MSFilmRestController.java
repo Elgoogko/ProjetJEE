@@ -5,9 +5,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.Exceptions.CommentServiceException;
 import com.Exceptions.SearchException;
 import com.actors.*;
+import com.exceptions.ActorManagerException;
 import com.msfilm.controller.Managers.MovieManager;
 import com.msfilm.controller.Managers.compressedMovieManager;
 import com.msfilm.controller.entities.Comment;
+import com.msfilm.controller.entities.Film;
 import com.msfilm.services.CommentService;
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +23,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -41,17 +42,6 @@ public class MSFilmRestController {
 
     @Autowired
     private CommentService commentService;
-
-    @PostMapping("/postComment")
-    public ResponseEntity<String> postComment(@RequestBody Comment entity) {
-        try {
-            commentService.createComment(entity.getIdUser(), entity.getIdMovie(), entity.getComment(),
-                    entity.getScore());
-            return ResponseEntity.ok("OK");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
-        }
-    }
 
     @GetMapping("/getCommentsSingleParam")
     public ResponseEntity<List<Comment>> getComment(@RequestParam(required = false) String filmId,
@@ -88,11 +78,22 @@ public class MSFilmRestController {
      * @param name movie name
      * @return JSON of the actor Movie
      */
-    @GetMapping("/getMovieAsJSON")
+    @GetMapping("/getMovieByName")
     public ResponseEntity<Actor> getMethodName(@RequestParam String name) {
         try {
             Actor filmAsActor = filmManager.getExactFilm(name);
             return ResponseEntity.ok(filmAsActor);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(null);
+        }
+    }
+
+    @GetMapping("/getMovieByID")
+    public ResponseEntity<MessageDTO> getMovieByID(@RequestParam String imdbID, @RequestParam String userID) {
+        try {
+            Film f = filmManager.getFilmByIMDBID(imdbID);
+            MessageDTO message = new MessageDTO(userID, f.getId(), f.castToJSONObject());
+            return ResponseEntity.ok(message);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(null);
         }
@@ -111,4 +112,15 @@ public class MSFilmRestController {
         }
     }
 
+    @PostMapping("/postComment")
+    public ResponseEntity<String> sendMessageToFilm(@RequestBody MessageDTO message) {
+        try {
+            filmManager.transferToActorLocal(message);
+            return ResponseEntity.ok(null);
+        } catch (ActorManagerException e) {
+            filmManager.getFilmByIMDBID(message.receiverId);
+            filmManager.transferToActorLocal(message);
+            return ResponseEntity.ok(null);
+        }
+    }
 }

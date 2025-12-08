@@ -8,7 +8,6 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import com.actors.Actor;
 import com.actors.ActorManager;
 import com.exceptions.ActorManagerException;
 
@@ -23,7 +22,7 @@ public class ActorManagerSetAutoID {
     @DisplayName("Test single actor ID")
     @Test
     public void singleActorIDtest(){
-        Actor a = new Actor();
+        ActorAsClass a = new ActorAsClass();
         manager.addActor(a);
         assertEquals("AM0", a.getId());
     }
@@ -33,7 +32,7 @@ public class ActorManagerSetAutoID {
     public void multipleActorTest(){
         int i = 0;
         while(i < 10){
-            Actor a = new Actor();
+            ActorAsClass a = new ActorAsClass();
             manager.addActor(a);
             assertEquals(manager.getActorIdentifier()+String.valueOf(i), a.getId());
             i = i+1;
@@ -43,9 +42,9 @@ public class ActorManagerSetAutoID {
     @DisplayName("Give old ID to new actors")
     @Test
     public void oldIDTest(){
-        Actor a = new Actor();
-        Actor b = new Actor();
-        Actor c = new Actor();
+        ActorAsClass a = new ActorAsClass();
+        ActorAsClass b = new ActorAsClass();
+        ActorAsClass c = new ActorAsClass();
 
         manager.addActor(a);
         manager.addActor(b);
@@ -62,18 +61,18 @@ public class ActorManagerSetAutoID {
     public void limitIDtest(){
         int i = 0;
         while(i < 1000){
-            Actor a = new Actor();
+            ActorAsClass a = new ActorAsClass();
             manager.addActor(a);
             i = i +1;
         }
-        Actor b = new Actor();
+        ActorAsClass b = new ActorAsClass();
         assertThrows(ActorManagerException.class, () -> {manager.addActor(b);});
     }
 
     @DisplayName("Remove unknown actor")
     @Test
     public void removeUnknownActortest(){
-        Actor a = new Actor();
+        ActorAsClass a = new ActorAsClass();
         assertFalse(manager.deleteActor(a));
     }
 }

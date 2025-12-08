@@ -2,10 +2,14 @@ package com.actors;
 
 import java.util.HashSet;
 
+import org.json.JSONObject;
 import org.springframework.scheduling.annotation.Scheduled;
 import com.exceptions.ActorManagerException;
+import org.springframework.web.client.RestTemplate;
 
 public class ActorManager {
+
+    private RestTemplate restTemplate = null;
 
     /**
      * List of actors currently up
@@ -95,6 +99,7 @@ public class ActorManager {
         if (isAutoID()) {
             a.setID(getUniqueID());
         }
+        a.setReference(this);
         return this.actors.add(a);
     }
 
@@ -139,7 +144,7 @@ public class ActorManager {
      * @param actSource ID of source actor
      * @param actDest   ID of destination actor
      */
-    public void transfertToActor(String message, String actSource, String actDest) {
+    public void transfertToActor(JSONObject message, String actSource, String actDest) {
         this.getActorByID(actSource).receive(message, actDest);
     }
 
@@ -162,6 +167,31 @@ public class ActorManager {
             tempTime = 0;
         } else {
             tempTime = tempTime + 1000;
+        }
+    }
+
+    /**
+     * LOCAL MESSAGE TRANSFER
+     */
+    public void transferToActorLocal(MessageDTO dto) throws ActorManagerException {
+        Actor dest = getActorByID(dto.receiverId);
+
+        if (dest != null) {
+            dest.receive(dto.message, dto.senderId);
+        }
+        else{
+            throw new ActorManagerException("Actor doesn't exist or is dead ! Try to instanciate it First.");
+        }
+    }
+
+    /**
+     * REMOTE MESSAGE TRANSFER
+     */
+    public void transferToRemoteMicroservice(MessageDTO dto, String remoteUrl) {
+        try {
+            restTemplate.postForObject(remoteUrl, dto, Void.class);
+        } catch (Exception e) {
+            System.err.println("Remote transfer failed: " + e.getMessage());
         }
     }
 

@@ -1,6 +1,5 @@
 package ActorManager;
 
-import com.actors.Actor;
 import com.actors.ActorManager;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -31,11 +30,11 @@ public class ActorManagerCheckLifetimeTest {
     @Test
     public void testCheckLifeTimeUnit() throws InterruptedException {
         // Ajoutez des acteurs avec un lifetime connu
-        Actor actor1 = new Actor();
+        ActorAsClass actor1 = new ActorAsClass();
         actor1.setLifetime(2000); // 2 secondes
         actor1.setID("actor1");
 
-        Actor actor2 = new Actor();
+        ActorAsClass actor2 = new ActorAsClass();
         actor2.setLifetime(10000); // 10 secondes
         actor2.setID("actor2");
 
@@ -57,8 +56,8 @@ public class ActorManagerCheckLifetimeTest {
     @DisplayName("test decrement by checkIntervale")
     @Test
     public void DecrementLifetimeTest() throws InterruptedException {
-        Actor a = new Actor();
-        Actor b = new Actor();
+        ActorAsClass a = new ActorAsClass();
+        ActorAsClass b = new ActorAsClass();
 
         a.setLifetime(10000);
         b.setLifetime(8000);

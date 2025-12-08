@@ -1,9 +1,13 @@
 package com.msfilm.controller.entities;
 
+import java.util.List;
 import java.util.Map;
+
+import org.json.JSONObject;
 
 import com.actors.Actor;
 import com.actors.Status;
+import com.msfilm.services.CommentService;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -33,10 +37,20 @@ public class Film extends Actor {
     @NotNull(message = "Données invalides !")
     private Map<String, Object> moviedata;
 
+    @NotNull(message = "Erreur d'initialisation !")
+    private CommentService commentService;
+
     public Film() {
         this.setLifetime(25000);
         this.setID((String) this.getMoviedata().get("imdbID"));
         this.setStatus(Status.ALIVE);
+    }
+
+    public JSONObject castToJsonObject(){
+        JSONObject json = new JSONObject();
+        json.append("moviedata", this.moviedata);
+        json.append("score", this.score);
+        return json;
     }
 
     @Override
@@ -45,4 +59,34 @@ public class Film extends Actor {
                 + moviedata.get("Description") + "; Score : " + this.score;
     }
 
+    @Override
+    public void receive(JSONObject message, String senderID) {
+        try {
+            // message contient par exemple : { "comment": "Super film!", "score": 4,
+            // "userId": "user123" }
+            Double newScore = message.getDouble("score");
+            String userId = message.getString("userId");
+
+            // Enregistrer le commentaire via le service
+            commentService.createComment(userId, this.getId(), message.getString("comment"), newScore);
+
+            // Recalculer la moyenne
+            List<Comment> allComments = commentService.getCommentByFilmID(this.getId());
+            float sum = 0;
+            for (Comment c : allComments) {
+                sum += c.getScore();
+            }
+            if (!allComments.isEmpty()) {
+                this.score = sum / allComments.size();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public JSONObject castToJSONObject() {
+        throw new UnsupportedOperationException("Unimplemented method 'castToJSONObject'");
+    }
 }
