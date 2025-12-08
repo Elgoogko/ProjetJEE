@@ -1,5 +1,10 @@
 package com.actors;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 
 import org.json.JSONObject;
@@ -54,6 +59,7 @@ public class ActorManager {
         this.maximumNumberOfActor = builder.maximumNumberOfActor;
     }
 
+
     /**
      * Create a new unique ID used by the next actors according to the actors
      * currently up
@@ -99,6 +105,8 @@ public class ActorManager {
         if (isAutoID()) {
             a.setID(getUniqueID());
         }
+        a.initializeLogs("Actor");
+        a.writeLog("Actor Created with id :" + a.getId());
         a.setReference(this);
         return this.actors.add(a);
     }
@@ -110,13 +118,13 @@ public class ActorManager {
      * @param id
      * @return an actor if it exists, null if not
      */
-    public Actor getActorByID(String id) throws ActorManagerException {
+    public Actor getActorByID(String id) {
         for (Actor a : actors) {
             if (a.getId().equals(id)) {
                 return a;
             }
         }
-        throw new ActorManagerException("Actor doesn't exist on this Manager");
+        return null;
     }
 
     /**
@@ -125,6 +133,7 @@ public class ActorManager {
      * @param a Actor instance
      */
     public boolean deleteActor(Actor a) {
+        a.closeLogs();
         return this.actors.remove(a);
     }
 
@@ -134,6 +143,8 @@ public class ActorManager {
      * @param id Actor ID
      */
     public void deleteActor(String id) {
+        getActorByID(id).writeLog("Supression actor :"+id);
+        getActorByID(id).closeLogs();
         this.actors.remove(getActorByID(id));
     }
 
@@ -145,6 +156,8 @@ public class ActorManager {
      * @param actDest   ID of destination actor
      */
     public void transfertToActor(JSONObject message, String actSource, String actDest) {
+        getActorByID(actSource).writeLog("'"+actSource+"' envoie a '"+actDest+"' : "+message.toString());
+        getActorByID(actSource).writeLog("'"+actDest+"' recoie de '"+actSource+"' : "+message.toString());
         this.getActorByID(actSource).receive(message, actDest);
     }
 
@@ -177,9 +190,12 @@ public class ActorManager {
         Actor dest = getActorByID(dto.receiverId);
 
         if (dest != null) {
+            getActorByID(dto.senderId).writeLog("'"+dto.senderId+"' envoie a '"+dest.getId()+"' : "+dto.message.toString());
+            dest.writeLog("'"+dest.getId()+"' recoie de '"+dto.senderId+"' : "+dto.message.toString());
             dest.receive(dto.message, dto.senderId);
-        } else {
-            throw new ActorManagerException("Actor doesn't exist or is dead! Try to instanciate it First.");
+        }
+        else{
+            throw new ActorManagerException("Actor doesn't exist or is dead ! Try to instanciate it First.");
         }
     }
 
