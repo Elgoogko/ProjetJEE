@@ -1,5 +1,11 @@
 package com.actors;
 
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import com.exceptions.ActorException;
 
 /**
@@ -17,6 +23,10 @@ import com.exceptions.ActorException;
  */
 public class Actor {
 
+
+    private PrintWriter writer;
+    private boolean logsActives = true;
+
     /**
      * Unique ID of each actors choosen by the actor manager
      */
@@ -28,6 +38,47 @@ public class Actor {
     private long lifetime = 5000;
 
     public Actor(){};
+
+    /**
+     * Open log file and be ready to write in
+     * @param nameClass Name at the start of the log file
+     */
+    public void initializeLogs(String nameClass){
+
+        if (!logsActives) return;
+    
+        try {
+
+            String timestamp = LocalDateTime.now().format(
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            );
+            FileWriter fileWriter = new FileWriter(nameClass+this.id+timestamp, true);
+            writer = new PrintWriter(fileWriter);
+            
+        } catch (IOException e) {
+            System.err.println("Error when open log file : " + e.getMessage());
+            logsActives = false; // Désactive les logs en cas d'erreur
+        }
+    }
+
+    /**
+     * Write in log file
+     * @param message to put in log file
+     */
+    public void writeLog(String message) {
+        if (!logsActives || writer == null) return;
+        
+        try {
+            String timestamp = LocalDateTime.now().format(
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            );
+            writer.println("[" + timestamp + "] " + message);
+            writer.flush();
+            
+        } catch (Exception e) {
+            System.err.println("Erreur when writting logs: " + e.getMessage());
+        }
+    }
 
     /**
      * Setter for lifetime, used to reduce the lifetime or give it more time
