@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Détails du film</title>
+</head>
+<body>
+    <h1 th:if="${success}">Détails du film : <span th:text="${film.getMovieProperty('Title')}">Titre</span></h1>
+
+    <div th:if="${success}">
+        <p><strong>Année :</strong> <span th:text="${film.getMovieProperty('Year')}">Année</span></p>
+        <p><strong>Réalisateur :</strong> <span th:text="${film.getMovieProperty('Director')}">Réalisateur</span></p>
+        <p><strong>Acteurs :</strong> <span th:text="${film.getMovieProperty('Actors')}">Acteurs</span></p>
+        <p><strong>Synopsis :</strong> <span th:text="${film.getMovieProperty('Plot')}">Synopsis</span></p>
+        <p><strong>Note IMDb :</strong> <span th:text="${film.getMovieProperty('imdbRating')}">Note</span>/10</p>
+        <img th:src="${film.getMovieProperty('Poster')}" alt="Affiche du film" th:if="${film.getMovieProperty('Poster') != null}">
+    </div>
+
+    <div th:if="${!success}" style="color: red;">
+        <p th:text="${error}">Erreur</p>
+    </div>
+</body>
+</html>

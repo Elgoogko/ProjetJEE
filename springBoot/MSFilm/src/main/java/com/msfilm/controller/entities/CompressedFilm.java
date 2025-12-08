@@ -9,7 +9,6 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
@@ -34,11 +33,6 @@ public class CompressedFilm extends Actor {
     @NotEmpty
     @NotNull
     private String imdbID;
-
-    public CompressedFilm() {
-        this.setID(imdbID);
-        this.setStatus(Status.STANDBY);
-    }
 
     @Override
     public String toString() {

@@ -51,5 +51,4 @@ public class AuthController {
     public String showLogin() {
         return "auth/login";
     }
-
 }

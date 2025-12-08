@@ -1,13 +1,7 @@
 package com.msfilm.controller.Managers;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
-
-import org.hibernate.id.IntegralDataTypeHolder;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +10,7 @@ import org.springframework.stereotype.Component;
 import com.Exceptions.SearchException;
 import com.actors.Actor;
 import com.actors.ActorManager;
+import com.actors.Status;
 import com.msfilm.controller.entities.CompressedFilm;
 import com.msfilm.doe.DOE;
 
@@ -33,8 +28,9 @@ public class compressedMovieManager extends ActorManager {
 
     /**
      * Return a list of compressed movie, based on a research and a page
-     * @param filmName Film name 
-     * @param page search page
+     * 
+     * @param filmName Film name
+     * @param page     search page
      * @return
      * @throws Exception
      */
@@ -56,12 +52,14 @@ public class compressedMovieManager extends ActorManager {
 
         for (int i = 0; i <= second.length() - 1; i++) {
             JSONObject temp = second.getJSONObject(i);
-            CompressedFilm film = new CompressedFilm(
+            CompressedFilm compressedFilm = new CompressedFilm(
                     temp.optString("Title", ""),
                     temp.optInt("Year", 0),
                     temp.optString("Poster", ""),
                     temp.optString("imdbID", ""));
-            this.addActor(film);
+            compressedFilm.setStatus(Status.STANDBY);
+            compressedFilm.setID(compressedFilm.getImdbID());
+            this.addActor(compressedFilm);
         }
         return this.getAllActors();
     }
