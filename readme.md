@@ -101,20 +101,15 @@ Dans le pom.xml, il faut mettre :
 	</dependency>
 ```
 
-Ensuite, il faut exécuter les commandes suivantes dans la racine du projet SprinBoot.
+Ensuite, il faut exécuter les commandes suivantes dans le dossier actorsManager
 Sur Linux : 
 ```bash
-mvn install:install-file -Dfile=lib/Actor.jar -DgroupId=com.actor -DartifactId=actor-interface -Dversion=1.0 -Dpackaging=jar
+./compileLibrary.sh
 ```
 
 Sur Windows : 
 ```batch
-mvn install:install-file "-Dfile=H:\Documents\ProjetJava\ProjetJEE\ProjetJEE\springBoot\MSFilm\libs\Actor.jar" "-DgroupId=com.actor" "-DartifactId=actor-interface" "-Dversion=1.0" "-Dpackaging=jar"
-```
-
-Et finir par : 
-```bash
-mvn clean compile
+compileLibrary.bat
 ```
 
 Sinon, pour éxécuter compile.bat / compile.sh partout, il suffit d'utiliser Docker (si disponible sur le système)
