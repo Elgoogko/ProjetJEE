@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Enregistrement</title>
@@ -9,7 +9,7 @@
     <!-- Formulaire d'enregistrement -->
     <div id="registerForm">
         <h1>Enregistrement</h1><br>
-        <form method="POST" action="register">
+        <form th:action="@{/auth/register}" method="post">
 
             <div id="registerEmailDiv">
                 <label for="registerEmail">Email</label><br>
@@ -47,7 +47,7 @@
         </form>
     </div>
 
-    <p>Vous avez déjà un compte ? <a href="login.html">Connectez-vous ici.</a></p>
+    <p>Vous avez déjà un compte ? <a th:href="@{/auth/login}">Connectez-vous ici.</a></p>
 
 </body>
 </html>

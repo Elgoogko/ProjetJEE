@@ -1,15 +1,20 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Connexion</title>
 </head>
 <body>
 
+<!-- Message de déconnexion -->
+<div th:if="${param.logout}">
+    Vous êtes déconnecté.
+</div>
+
 <!-- Formulaire de connexion -->
 <div id="loginForm">
     <h1>Connexion</h1><br>
-    <form method="POST" action="login">
+    <form th:action="@{/auth/login}" method="post">
 
         <div id="inputUsernameDiv">
             <label for="inputUsername"> Pseudonyme</label><br>
@@ -28,7 +33,12 @@
     </form>
 </div>
 
-<p>Vous n'avez pas encore de compte ? <a href="register.html">Inscrivez-vous ici</a></p>
+<!-- Message d'erreur -->
+<div th:if="${param.error}">
+    Nom d'utilisateur ou mot de passe incorrect.
+</div>
+
+<p>Vous n'avez pas encore de compte ? <a th:href="@{/public/register}">Inscrivez-vous ici</a></p>
 
 </body>
 </html>
