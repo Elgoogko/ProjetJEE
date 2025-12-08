@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Connexion</title>
+</head>
+<body>
+
+<!-- Message de déconnexion -->
+<div th:if="${param.logout}">
+    Vous êtes déconnecté.
+</div>
+
+<!-- Formulaire de connexion -->
+<div id="loginForm">
+    <h1>Connexion</h1><br>
+    <form th:action="@{/auth/login}" method="post">
+
+        <div id="inputUsernameDiv">
+            <label for="inputUsername"> Pseudonyme</label><br>
+            <input type="text" name="username" id="inputUsername" placeholder="Entrez votre pseudonyme" required>
+        </div>
+        
+        <div id="inputPasswordDiv">
+            <label for="inputPassword"> Mot de passe</label><br>
+            <input type="password" name="password" id="inputPassword" placeholder="Entrez votre mot de passe" required>
+        </div>
+
+        <div id="sendLoginButtonDiv">
+            <input type="submit" class ="button" value="Envoyer">
+        </div>
+
+    </form>
+</div>
+
+<!-- Message d'erreur -->
+<div th:if="${param.error}">
+    Nom d'utilisateur ou mot de passe incorrect.
+</div>
+
+<p>Vous n'avez pas encore de compte ? <a th:href="@{/auth/register}">Inscrivez-vous ici</a></p>
+
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Détails du film</title>
+</head>
+
+<body>
+    <h1>Détails du film : <span th:text="${film.moviedata['Title']}">Titre</span></h1>
+
+    <div>
+        <p><strong>Année :</strong> <span th:text="${film.moviedata['Year']}">Année</span></p>
+        <p><strong>Réalisateur :</strong> <span th:text="${film.moviedata['Director']}">Réalisateur</span></p>
+        <p><strong>Acteurs :</strong> <span th:text="${film.moviedata['Actors']}">Acteurs</span></p>
+        <p><strong>Synopsis :</strong> <span th:text="${film.moviedata['Plot']}">Synopsis</span></p>
+        <p><strong>Note IMDb :</strong> <span th:text="${film.moviedata['imdbRating']}">Note</span>/10</p>
+        <img th:src="${film.moviedata['Poster']}" alt="Affiche du film"
+            th:if="${film.moviedata['Poster'] != null}">
+    </div>
+
+    <div th:if="${logged == true}">
+    <form th:action="@{/pages/comment}" method="post">
+        <!-- Champ caché pour l'ID du film -->
+        <input type="hidden" name="filmID" th:value="${film.id}" />
+        <div>
+            <label for="score">Score</label><br>
+            <input type="number" id="score" name="score" min="0" max="5" step="0.1" required>
+        </div>
+        <div>
+            <label for="comment">Commentaire</label><br>
+            <textarea id="comment" name="comment" rows="4" cols="50" placeholder="Votre commentaire..." required></textarea>
+        </div>
+        <div>
+            <button type="submit">Envoyer le commentaire</button>
+        </div>
+    </form>
+    </div>
+
+    <div th:if="${logged == false}">
+        <a th:href="@{/auth/login}"> Se connecter pour commenter </a>
+    </div>
+
+        <h2>Commentaires :</h2>
+        
+        <div th:each="c : ${comments}">
+            <p>
+                <strong th:text="${c.idUser}"></strong> :
+                <span th:text="${c.comment}"></span>
+                <br>
+                <i>Note : <span th:text="${c.score}"></span>/5</i>
+                <br>
+                <small th:text="${c.date}"></small>
+            </p>
+        </div>
+
+</body>
+
+</html>

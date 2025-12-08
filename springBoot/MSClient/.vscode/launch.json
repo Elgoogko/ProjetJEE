@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-MSClientApplication<msclient>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.msclient.MSClientApplication",
+            "projectName": "msclient",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

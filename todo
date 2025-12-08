@@ -1,0 +1,14 @@
+rename les micro service en client et film
+faut-il faire des return boolean sur les send et receive des actor pour verifier en cas d'erreur ???
+faut-il mettre un return boolean sur la creation de sous acteur (si on veut limiter le nombre de sous acteur par ex)
+adapter le compile.bat en compile.sh
+essayer de faire fonctionner le dockerFile pour : compiler Actor.jar et pour lancer tout le projet, quelque soit la machine
+mettre le mainfilm en singleton
+
+1) connecter la BDD sur MSFilm
+1.1) créer les getters et les post sur les commentaires ** 
+1.2) Mettre en place la recherche de film comprésé
+1.3) mettre en place le système de changement de page de la recherche de film comprésé
+2) Mettre en place la BDD sur client
+2.1) créer une interface sur client
+2.3) créer les méthodes pour sauvegarder et réccupérer les clients

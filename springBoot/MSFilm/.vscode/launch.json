@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-MSFilmApplication<msfilm>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.msfilm.MSFilmApplication",
+            "projectName": "msfilm",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

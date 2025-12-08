@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>search Movie</title>
+</head>
+<body>
+    <search>
+    <form th:action="@{/pages/search}" method="post">
+        <div id="filmName">
+            <label for="title">Titre</label><br>
+            <input type="text" name="title" id="filmName" placeholder="Entrez le titre du film" required>
+        </div>
+        <div id="pages">
+            <label for="page">Page</label><br>
+            <input type="number" name="page" id="page" placeholder="1" min="1" max="100" required>
+        </div>
+        <button type="submit">Search</button>
+    </form>
+    </search>
+
+    <h1>Résultats de recherche</h1>
+    
+    <div th:if="${films.isEmpty()}">
+        Aucun résultat trouvé.
+    </div>
+    
+    <div th:if="${!films.isEmpty()}">
+        <ul>
+            <li th:each="film : ${films}">
+                <a th:href="@{/pages/movie(imdbID=${film.imdbID})}">
+                <h3 th:text="${film.title}">Titre</h3>
+                <p>Année : <span th:text="${film.releasetYear}">2020</span></p>
+                <img th:src="${film.linkToPoster}" alt="Poster" width="100">
+                <p>IMDB ID : <span th:text="${film.imdbID}">tt0000000</span></p>
+                </a>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>

@@ -63,11 +63,11 @@ Naviger dans le dossier `springBoot/Starters/`
 
 #### Pour Windows
 Démmarer le projet
-```bash
+```batch
 ./start.bat
 ```
 Arrêter le projet 
-```bash
+```batch
 ./stop.bat
 ```
 
@@ -90,3 +90,35 @@ Arrêter le projet
 ```
 
 **Attention : utilisé le stop.bat / stop.sh va arrêter tous les processus Java de la machine, qu'ils fassent partie du projet ou non**
+
+## Installer le Actor.jar
+Dans le pom.xml, il faut mettre : 
+```xml
+	<dependency>
+		<groupId>com.actor</groupId>
+		<artifactId>actor-interface</artifactId>
+		<version>1.0</version>
+	</dependency>
+```
+
+Ensuite, il faut exécuter les commandes suivantes dans la racine du projet SprinBoot.
+Sur Linux : 
+```bash
+mvn install:install-file -Dfile=lib/Actor.jar -DgroupId=com.actor -DartifactId=actor-interface -Dversion=1.0 -Dpackaging=jar
+```
+
+Sur Windows : 
+```batch
+mvn install:install-file "-Dfile=H:\Documents\ProjetJava\ProjetJEE\ProjetJEE\springBoot\MSFilm\libs\Actor.jar" "-DgroupId=com.actor" "-DartifactId=actor-interface" "-Dversion=1.0" "-Dpackaging=jar"
+```
+
+Et finir par : 
+```bash
+mvn clean compile
+```
+
+Sinon, pour éxécuter compile.bat / compile.sh partout, il suffit d'utiliser Docker (si disponible sur le système)
+```batch
+docker build -t actor-build .
+docker run --rm -v %cd%:/app actor-build
+```

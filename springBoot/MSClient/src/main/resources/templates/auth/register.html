@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Enregistrement</title>
+</head>
+<body>
+
+    <!-- Formulaire d'enregistrement -->
+    <div id="registerForm">
+        <h1>Enregistrement</h1><br>
+        <form th:action="@{/auth/register}" method="post">
+
+            <div id="registerEmailDiv">
+                <label for="registerEmail">Email</label><br>
+                <input type="text" name="email" id="registerEmail" placeholder="Entrez votre email" required>
+            </div>
+
+            <div id="registerUsernameDiv">
+                <label for="registerUsername">Pseudonyme</label><br>
+                <input type="text" name="username" id="registerUsername" placeholder="Entrez votre pseudonyme" required>
+            </div>
+
+            <div id="registerNameDiv">
+                <label for="registerName">Nom</label><br>
+                <input type="text" name="name" id="registerName" placeholder="Entrez votre nom" required>
+            </div>
+
+            <div id="registerSurnameDiv">
+                <label for ="registerSurname">Prénom</label><br>
+                <input type="text" name="surname" id="registerSurname" placeholder="Entrez votre prénom" required>
+            </div>
+
+            <div id="registerPasswordDiv">
+                <label for="registerPassword">Mot de passe</label><br>
+                <input type="password" name="password" id="registerPassword" placeholder="Entrez votre mot de passe" required>
+            </div>
+            <div id="registerConfirmPasswordDiv">
+                <label for="registerRepeatPassword">Répétez votre mot de passe</label><br>
+                <input type="password" name="repeatPassword" id="registerRepeatPassword" placeholder="Répétez votre mot de passe" required>
+            </div>
+
+            <div id="sendRegisterButtonDiv">
+                <input type="submit" class ="button" value="Envoyer">
+            </div>
+
+        </form>
+    </div>
+
+    <p>Vous avez déjà un compte ? <a th:href="@{/auth/login}">Connectez-vous ici.</a></p>
+
+</body>
+</html>
