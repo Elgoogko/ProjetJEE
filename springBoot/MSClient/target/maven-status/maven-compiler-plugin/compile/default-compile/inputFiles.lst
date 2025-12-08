@@ -1,0 +1,15 @@
+/home/lyxorl/Documents/CYTech/ING2/S1/JEE/Projet/ProjetJEE/springBoot/MSClient/src/main/java/com/DTO/CompressedFilmDTO.java
+/home/lyxorl/Documents/CYTech/ING2/S1/JEE/Projet/ProjetJEE/springBoot/MSClient/src/main/java/com/DTO/MovieDTO.java
+/home/lyxorl/Documents/CYTech/ING2/S1/JEE/Projet/ProjetJEE/springBoot/MSClient/src/main/java/com/exceptions/ServicesException.java
+/home/lyxorl/Documents/CYTech/ING2/S1/JEE/Projet/ProjetJEE/springBoot/MSClient/src/main/java/com/msclient/Config/CustomUserDetailsService.java
+/home/lyxorl/Documents/CYTech/ING2/S1/JEE/Projet/ProjetJEE/springBoot/MSClient/src/main/java/com/msclient/Config/SecurityConfig.java
+/home/lyxorl/Documents/CYTech/ING2/S1/JEE/Projet/ProjetJEE/springBoot/MSClient/src/main/java/com/msclient/Controller/AdminController.java
+/home/lyxorl/Documents/CYTech/ING2/S1/JEE/Projet/ProjetJEE/springBoot/MSClient/src/main/java/com/msclient/Controller/AuthController.java
+/home/lyxorl/Documents/CYTech/ING2/S1/JEE/Projet/ProjetJEE/springBoot/MSClient/src/main/java/com/msclient/Controller/MSClientController.java
+/home/lyxorl/Documents/CYTech/ING2/S1/JEE/Projet/ProjetJEE/springBoot/MSClient/src/main/java/com/msclient/Controller/PublicPagesController.java
+/home/lyxorl/Documents/CYTech/ING2/S1/JEE/Projet/ProjetJEE/springBoot/MSClient/src/main/java/com/msclient/Entity/Role.java
+/home/lyxorl/Documents/CYTech/ING2/S1/JEE/Projet/ProjetJEE/springBoot/MSClient/src/main/java/com/msclient/Entity/User.java
+/home/lyxorl/Documents/CYTech/ING2/S1/JEE/Projet/ProjetJEE/springBoot/MSClient/src/main/java/com/msclient/Entity/UserAsActor.java
+/home/lyxorl/Documents/CYTech/ING2/S1/JEE/Projet/ProjetJEE/springBoot/MSClient/src/main/java/com/msclient/MSClientApplication.java
+/home/lyxorl/Documents/CYTech/ING2/S1/JEE/Projet/ProjetJEE/springBoot/MSClient/src/main/java/com/msclient/Repository/UserRepository.java
+/home/lyxorl/Documents/CYTech/ING2/S1/JEE/Projet/ProjetJEE/springBoot/MSClient/src/main/java/com/msclient/UserManager.java

@@ -1,0 +1,17 @@
+com/msclient/Controller/AdminController.class
+com/msclient/Config/CustomUserDetailsService.class
+com/msclient/Config/SecurityConfig.class
+com/msclient/Controller/PublicPagesController.class
+com/msclient/Repository/UserRepository.class
+com/exceptions/ServicesException.class
+com/msclient/Controller/PublicPagesController$2.class
+com/msclient/Entity/UserAsActor.class
+com/msclient/Controller/PublicPagesController$1.class
+com/msclient/UserManager.class
+com/DTO/CompressedFilmDTO.class
+com/msclient/Controller/MSClientController.class
+com/DTO/MovieDTO.class
+com/msclient/Entity/User.class
+com/msclient/Controller/AuthController.class
+com/msclient/MSClientApplication.class
+com/msclient/Entity/Role.class
