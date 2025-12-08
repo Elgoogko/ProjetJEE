@@ -4,7 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.json.JSONObject;
-
+import com.msfilm.Order;
+import com.msfilm.DTO.MovieDTO;
 import com.actors.Actor;
 import com.actors.Status;
 import com.msfilm.services.CommentService;
@@ -46,7 +47,7 @@ public class Film extends Actor {
         this.setStatus(Status.ALIVE);
     }
 
-    public JSONObject castToJsonObject(){
+    public JSONObject castToJsonObject() {
         JSONObject json = new JSONObject();
         json.append("moviedata", this.moviedata);
         json.append("score", this.score);
@@ -87,6 +88,21 @@ public class Film extends Actor {
 
     @Override
     public JSONObject castToJSONObject() {
-        throw new UnsupportedOperationException("Unimplemented method 'castToJSONObject'");
+        JSONObject obj = new JSONObject();
+        obj.put("moviedata", this.moviedata);
+        obj.put("score", score);
+        return obj;
+    }
+
+    public List<Comment> getAllComments() {
+        return this.commentService.getCommentByFilmID(this.getId());
+    }
+
+    public MovieDTO toDTO() {
+        return new MovieDTO(this.score, this.moviedata);
+    }
+
+    public List<Comment> getAllCommentOrdered(Order o) {
+        return this.commentService.getCommentsByDate(getId(), o);
     }
 }

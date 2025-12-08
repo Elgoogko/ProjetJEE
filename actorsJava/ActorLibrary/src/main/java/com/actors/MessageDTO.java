@@ -12,4 +12,7 @@ public class MessageDTO {
         this.receiverId = receiverId;
         this.message = message;
     }
+
+    public MessageDTO() {
+    }
 }

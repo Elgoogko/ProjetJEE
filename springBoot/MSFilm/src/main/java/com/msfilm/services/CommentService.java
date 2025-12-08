@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.Exceptions.CommentServiceException;
+import com.msfilm.Order;
 import com.msfilm.controller.entities.Comment;
 
 @Service
@@ -91,5 +92,19 @@ public class CommentService {
      */
     public List<Comment> getCommentByUserId(String userId) throws CommentServiceException {
         return cr.findByIdUser(userId);
+    }
+
+    /**
+     * 
+     * @param filmID
+     * @param o
+     * @return
+     */
+    public List<Comment> getCommentsByDate(String filmID, Order o) {
+        if (o == Order.ASC) {
+            return cr.findByIdMovieOrderByDateAsc(filmID);
+        } else {
+            return cr.findByIdMovieOrderByDateDesc(filmID);
+        }
     }
 }

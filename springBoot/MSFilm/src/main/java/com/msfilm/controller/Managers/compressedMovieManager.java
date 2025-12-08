@@ -11,6 +11,7 @@ import com.Exceptions.SearchException;
 import com.actors.Actor;
 import com.actors.ActorManager;
 import com.actors.Status;
+import com.msfilm.DTO.CompressedFilmDTO;
 import com.msfilm.controller.entities.CompressedFilm;
 import com.msfilm.doe.DOE;
 
@@ -34,12 +35,12 @@ public class compressedMovieManager extends ActorManager {
      * @return
      * @throws Exception
      */
-    public HashSet<Actor> getSearchResult(String filmName, int page) throws Exception {
+    public HashSet<CompressedFilm> getSearchResult(String filmName, int page) throws Exception {
         if (page > 100 || page < 1) {
             throw new SearchException("Can't go higher than 100 pages or less than 1");
         }
         if (this.lastSearch.equals(filmName) && this.currentPage == page) {
-            return this.getAllActors();
+            return this.CastToCompressedMovies();
         }
 
         this.lastSearch = filmName;
@@ -61,6 +62,29 @@ public class compressedMovieManager extends ActorManager {
             compressedFilm.setID(compressedFilm.getImdbID());
             this.addActor(compressedFilm);
         }
-        return this.getAllActors();
+        return this.CastToCompressedMovies();
     }
+
+    public HashSet<CompressedFilm> CastToCompressedMovies() {
+        HashSet<CompressedFilm> result = new HashSet<>();
+        for (Actor a : this.getAllActors()) {
+            if (a instanceof CompressedFilm cf) {
+                result.add(cf);
+            }
+        }
+        return result;
+    }
+
+    public HashSet<CompressedFilmDTO> toDTOSet(HashSet<CompressedFilm> films) {
+        HashSet<CompressedFilmDTO> dtos = new HashSet<>();
+        for (CompressedFilm film : films) {
+            dtos.add(new CompressedFilmDTO(
+                    film.getTitle(),
+                    film.getReleaseYear(),
+                    film.getLinkToPoster(),
+                    film.getImdbID()));
+        }
+        return dtos;
+    }
+
 }

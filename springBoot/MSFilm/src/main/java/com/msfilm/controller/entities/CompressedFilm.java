@@ -23,7 +23,7 @@ public class CompressedFilm extends Actor {
     private String title;
 
     @Min(0)
-    private int releasetYear;
+    private int releaseYear;
 
     @NotBlank
     @NotEmpty
@@ -37,7 +37,7 @@ public class CompressedFilm extends Actor {
 
     @Override
     public String toString() {
-        return "CompressedFilm [title=" + title + ", releasetYear=" + releasetYear + ", linkToPoster=" + linkToPoster
+        return "CompressedFilm [title=" + title + ", releasetYear=" + releaseYear + ", linkToPoster=" + linkToPoster
                 + ", imdbID=" + imdbID + "]";
     }
 
@@ -48,7 +48,12 @@ public class CompressedFilm extends Actor {
 
     @Override
     public JSONObject castToJSONObject() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'castToJSONObject'");
+        JSONObject obj = new JSONObject();
+        obj.put("title", this.title);
+        obj.put("imdbID", this.imdbID);
+        obj.put("releaseYear", this.releaseYear);
+        obj.put("linkToPoster", this.linkToPoster);
+
+        return obj;
     }
 }

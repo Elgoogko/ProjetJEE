@@ -20,7 +20,8 @@ import com.exceptions.ActorException;
 public abstract class Actor {
 
     private Status status;
-    private ActorManager reference;
+
+    private transient ActorManager reference;
 
     public ActorManager getReference() {
         return reference;

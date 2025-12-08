@@ -110,13 +110,13 @@ public class ActorManager {
      * @param id
      * @return an actor if it exists, null if not
      */
-    public Actor getActorByID(String id) {
+    public Actor getActorByID(String id) throws ActorManagerException {
         for (Actor a : actors) {
             if (a.getId().equals(id)) {
                 return a;
             }
         }
-        return null;
+        throw new ActorManagerException("Actor doesn't exist on this Manager");
     }
 
     /**
@@ -178,9 +178,8 @@ public class ActorManager {
 
         if (dest != null) {
             dest.receive(dto.message, dto.senderId);
-        }
-        else{
-            throw new ActorManagerException("Actor doesn't exist or is dead ! Try to instanciate it First.");
+        } else {
+            throw new ActorManagerException("Actor doesn't exist or is dead! Try to instanciate it First.");
         }
     }
 

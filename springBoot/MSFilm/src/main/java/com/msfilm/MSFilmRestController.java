@@ -6,9 +6,12 @@ import com.Exceptions.CommentServiceException;
 import com.Exceptions.SearchException;
 import com.actors.*;
 import com.exceptions.ActorManagerException;
+import com.msfilm.DTO.CompressedFilmDTO;
+import com.msfilm.DTO.MovieDTO;
 import com.msfilm.controller.Managers.MovieManager;
 import com.msfilm.controller.Managers.compressedMovieManager;
 import com.msfilm.controller.entities.Comment;
+import com.msfilm.controller.entities.CompressedFilm;
 import com.msfilm.controller.entities.Film;
 import com.msfilm.services.CommentService;
 
@@ -22,6 +25,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -58,7 +63,30 @@ public class MSFilmRestController {
         } catch (CommentServiceException e) {
             return ResponseEntity.badRequest().body(null);
         }
+    }
 
+    @GetMapping("/getCommentsByFilm")
+    public ResponseEntity<MessageDTO> getComments(@RequestParam String filmId) {
+        try {
+            List<Comment> comments = commentService.getCommentsByDate(filmId, Order.DSC);
+
+            JSONArray jsonComments = new JSONArray();
+            for (Comment c : comments) {
+                jsonComments.put(c.CastToJSON());
+            }
+
+            JSONObject json = new JSONObject();
+            json.put("comments", jsonComments);
+
+            MessageDTO dto = new MessageDTO(
+                    "msfilm", // sender = microservice
+                    "client", // receiver = client (pas un acteur !)
+                    json);
+
+            return ResponseEntity.ok(dto);
+        } catch (ActorManagerException e) {
+            return ResponseEntity.internalServerError().body(null);
+        }
     }
 
     @GetMapping("/getCommentsByID")
@@ -71,7 +99,6 @@ public class MSFilmRestController {
 
         }
     }
-
     /**
      * Return the movie in JSON format
      * 
@@ -89,21 +116,22 @@ public class MSFilmRestController {
     }
 
     @GetMapping("/getMovieByID")
-    public ResponseEntity<MessageDTO> getMovieByID(@RequestParam String imdbID, @RequestParam String userID) {
+    public ResponseEntity<MovieDTO> getMovieByID(@RequestParam String imdbID) {
         try {
             Film f = filmManager.getFilmByIMDBID(imdbID);
-            MessageDTO message = new MessageDTO(userID, f.getId(), f.castToJSONObject());
-            return ResponseEntity.ok(message);
+            return ResponseEntity.ok(f.toDTO());
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(null);
         }
     }
 
     @GetMapping("/getCompressedFilm")
-    public ResponseEntity<HashSet<Actor>> getCompressedfilm(@RequestParam String name, @RequestParam int page) {
+    public ResponseEntity<HashSet<CompressedFilmDTO>> getCompressedfilm(@RequestParam String name,
+            @RequestParam int page) {
         try {
-            HashSet<Actor> actors = cMM.getSearchResult(name, page);
-            return ResponseEntity.ok(actors);
+            HashSet<CompressedFilm> films = cMM.getSearchResult(name, page);
+            HashSet<CompressedFilmDTO> dtos = cMM.toDTOSet(films);
+            return ResponseEntity.ok(dtos);
         } catch (SearchException e) {
             return ResponseEntity.badRequest().body(null);
         } catch (Exception f) {

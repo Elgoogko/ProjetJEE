@@ -2,6 +2,8 @@ package com.msfilm.controller.entities;
 
 import java.time.LocalDateTime;
 
+import org.json.JSONObject;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -55,5 +57,16 @@ public class Comment {
         this.comment = comment;
         this.score = score;
         this.date = date;
+    }
+
+    public JSONObject CastToJSON() {
+        JSONObject jsonC = new JSONObject();
+        jsonC.put("id", this.getId());
+        jsonC.put("idMovie", this.getIdMovie());
+        jsonC.put("idUser", this.getIdUser());
+        jsonC.put("comment", this.getComment());
+        jsonC.put("score", this.getScore());
+        jsonC.put("date", this.getDate().toString()); // LocalDateTime -> String
+        return jsonC;
     }
 }

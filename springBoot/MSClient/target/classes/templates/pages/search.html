@@ -28,7 +28,7 @@
     <div th:if="${!films.isEmpty()}">
         <ul>
             <li th:each="film : ${films}">
-                <a th:href="@{/pages/fililm(imdbID=${film.imdbID})}">
+                <a th:href="@{/pages/movie(imdbID=${film.imdbID})}">
                 <h3 th:text="${film.title}">Titre</h3>
                 <p>Année : <span th:text="${film.releasetYear}">2020</span></p>
                 <img th:src="${film.linkToPoster}" alt="Poster" width="100">

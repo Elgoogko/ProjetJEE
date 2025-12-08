@@ -19,4 +19,9 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findByDate(LocalDateTime date);
 
     List<Comment> findByScore(double score);
+
+    List<Comment> findByIdMovieOrderByDateDesc(String idMovie);
+
+    List<Comment> findByIdMovieOrderByDateAsc(String idMovie);
+
 }

@@ -1,14 +1,18 @@
 package com.msclient.Controller;
 
+import java.security.Principal;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,10 +23,10 @@ import org.springframework.web.client.RestClient;
 
 import com.DTO.CompressedFilmDTO;
 import com.DTO.MovieDTO;
-import com.msclient.Entity.User;
-import com.msclient.Repository.UserRepository;
-
-
+import com.actors.MessageDTO;
+import com.exceptions.ServicesException;
+import com.msclient.UserManager;
+import com.msclient.Entity.UserAsActor;
 
 @Controller
 @RequestMapping("/pages/")
@@ -32,7 +36,7 @@ public class PublicPagesController {
     private final RestClient restClient;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserManager userManager;
 
     public PublicPagesController(DiscoveryClient discoveryClient, RestClient.Builder restClientBuilder) {
         this.discoveryClient = discoveryClient;
@@ -53,17 +57,14 @@ public class PublicPagesController {
     @PostMapping("search")
     public String searchPage(@RequestParam String title, @RequestParam int page, Model model) {
         try {
-            ServiceInstance serviceInstance = discoveryClient.getInstances("msfilm").get(0);
+            ServiceInstance filmInstance = discoveryClient.getInstances("msfilm").get(0);
 
             ResponseEntity<HashSet<CompressedFilmDTO>> response = restClient.get()
-                    .uri(serviceInstance.getUri() +
-                            "/api/getCompressedFilm?name=" + title + "&page="
-                            + page)
+                    .uri(filmInstance.getUri() + "/api/getCompressedFilm?name=" + title + "&page=" + page)
                     .retrieve()
                     .toEntity(new ParameterizedTypeReference<HashSet<CompressedFilmDTO>>() {
                     });
 
-            // ---- Gestion des statuts ----
             if (response.getStatusCode().is5xxServerError()) {
                 return "redirect:/error?type=server";
             }
@@ -71,12 +72,10 @@ public class PublicPagesController {
                 return "redirect:/error?type=unprocessable";
             }
 
-            // ---- Réponse OK ----
-            HashSet<CompressedFilmDTO> films = response.getBody();
-            model.addAttribute("films", films);
+            model.addAttribute("films", response.getBody());
             model.addAttribute("query", title);
 
-            return "pages/search"; // Affiche la page
+            return "pages/search";
         } catch (Exception e) {
             e.printStackTrace();
             return "redirect:/error?type=network";
@@ -84,16 +83,26 @@ public class PublicPagesController {
     }
 
     @GetMapping("movie")
-    public String getMoviePage(@RequestParam String imdbID, Model model) {
+    public String getMoviePage(@RequestParam String imdbID, Model model, Principal principal) {
         try {
-            ServiceInstance serviceInstance = discoveryClient.getInstances("msfilm").get(0);
+            ServiceInstance filmInstance = discoveryClient.getInstances("msfilm").get(0);
 
             ResponseEntity<MovieDTO> response = restClient.get()
-                    .uri(serviceInstance.getUri() +
+                    .uri(filmInstance.getUri() +
                             "/api/getMovieByID?imdbID=" + imdbID)
                     .retrieve()
                     .toEntity(new ParameterizedTypeReference<MovieDTO>() {
                     });
+
+            ResponseEntity<MessageDTO> responseComments = restClient.get()
+                    .uri(filmInstance.getUri() + "/api/getCommentsByFilm?filmId=" + imdbID)
+                    .retrieve()
+                    .toEntity(MessageDTO.class);
+
+            MessageDTO dto = responseComments.getBody();
+
+            // On récupère le JSON
+            JSONArray comments = dto.message.getJSONArray("comments");
 
             // ---- Gestion des statuts ----
             if (response.getStatusCode().is5xxServerError()) {
@@ -106,8 +115,13 @@ public class PublicPagesController {
             // ---- Réponse OK ----
             MovieDTO film = response.getBody();
             model.addAttribute("film", film);
+            model.addAttribute("comments", comments);
+            model.addAttribute("logged", principal != null); // True if connected, false otherwise
+            return "pages/movie";
 
-            return "pages/movie"; // Affiche la page
+        } catch (ServicesException f) {
+            f.printStackTrace();
+            return "redirect:/error?type=server";
         } catch (Exception e) {
             e.printStackTrace();
             return "redirect:/error?type=network";
@@ -115,14 +129,33 @@ public class PublicPagesController {
     }
 
     @PostMapping("comment")
-    public void postMethodName(@RequestParam String imdbID, @RequestParam String comment, @RequestParam float score, 
-            @AuthenticationPrincipal org.springframework.security.core.userdetails.User springUser) {
+    public ResponseEntity<String> postComment(@RequestParam String comment, @RequestParam float score,
+            @RequestParam String filmID, Principal principal) {
+        String username = principal.getName();
+        UserAsActor actor = (UserAsActor) userManager.getActorByID(username);
 
-        String username = springUser.getUsername(); // le login utilisé pour se connecter
+        if (actor == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Utilisateur non connecté ou acteur introuvable");
+        }
 
-        // si tu veux ton User JPA :
-        User user = userRepository.findByUsername(username).orElseThrow();
-        String email = user.getEmail();
+        try {
+            ServiceInstance filmInstance = discoveryClient.getInstances("msfilm").get(0);
 
+            String filmServiceUrl = filmInstance.getUri().toString() + "/api/postComment";
+
+            JSONObject json = new JSONObject();
+            json.append("comment", comment);
+            json.append("score", score);
+            actor.send(json, filmID, filmServiceUrl);
+            return ResponseEntity.ok("Commentaire envoyé !");
+        } catch (ServicesException f) {
+            f.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("MSFILM est injoignable " + f.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erreur lors de l'envoi du commentaire : " + e.getMessage());
+        }
     }
 }
