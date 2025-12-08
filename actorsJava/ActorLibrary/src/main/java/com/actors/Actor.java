@@ -1,5 +1,11 @@
 package com.actors;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import org.json.JSONObject;
 
 import com.exceptions.ActorException;
@@ -38,6 +44,9 @@ public abstract class Actor {
         this.status = status;
     }
 
+    private PrintWriter writer;
+    private boolean logsActives = true;
+
     /**
      * Unique ID of each actors choosen by the actor manager
      */
@@ -50,6 +59,56 @@ public abstract class Actor {
 
     public Actor() {
     };
+
+    /**
+     * Open log file and be ready to write in
+     * @param nameClass Name at the start of the log file
+     */
+    public void initializeLogs(String nameClass){
+
+        if (!logsActives) return;
+    
+        try {
+
+            String timestamp = LocalDateTime.now().format(
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            );
+            FileWriter fileWriter = new FileWriter(nameClass+this.id+timestamp, true);
+            writer = new PrintWriter(fileWriter);
+            
+        } catch (IOException e) {
+            System.err.println("Error when open log file : " + e.getMessage());
+            logsActives = false; // Désactive les logs en cas d'erreur
+        }
+    }
+
+    /**
+     * Write in log file
+     * @param message to put in log file
+     */
+    public void writeLog(String message) {
+        if (!logsActives || writer == null) return;
+        
+        try {
+            String timestamp = LocalDateTime.now().format(
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            );
+            writer.println("[" + timestamp + "] " + message);
+            writer.flush();
+            
+        } catch (Exception e) {
+            System.err.println("Erreur when writting logs: " + e.getMessage());
+        }
+    }
+
+    /**
+     * close log at the end of the actor
+     */
+    public void closeLogs() {
+        if (writer != null) {
+            writer.close();
+        }
+    }
 
     /**
      * Setter for lifetime, used to reduce the lifetime or give it more time
