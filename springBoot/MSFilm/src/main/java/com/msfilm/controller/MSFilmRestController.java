@@ -2,11 +2,16 @@ package com.msfilm.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.Exceptions.CommentServiceException;
+import com.Exceptions.SearchException;
 import com.actors.*;
-import com.msfilm.controller.Managers.MainFilmManager;
+import com.msfilm.controller.Managers.CommentManagaer;
+import com.msfilm.controller.Managers.MovieManager;
+import com.msfilm.controller.Managers.compressedMovieManager;
 import com.msfilm.controller.entities.Comment;
+import com.msfilm.controller.entities.CompressedFilm;
 import com.msfilm.controller.entities.Film;
-import com.services.CommentService;
+import com.msfilm.services.CommentService;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +37,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class MSFilmRestController {
 
     @Autowired
-    private MainFilmManager filmManager;
+    private MovieManager filmManager;
+
+    @Autowired
+    private compressedMovieManager cMM;
 
     @Autowired
     private CommentService commentService;
@@ -47,6 +56,35 @@ public class MSFilmRestController {
         }
     }
 
+    @GetMapping("/getCommentsSingleParam")
+    public ResponseEntity<List<Comment>> getComment(@RequestParam(required = false) String filmId,
+            @RequestParam(required = false) String userId) {
+        try {
+            List<Comment> comments = new ArrayList<>();
+            if (filmId != null) {
+                comments = commentService.getCommentByFilmID(filmId);
+            } else if (userId != null) {
+                comments = commentService.getCommentByFilmID(userId);
+            }
+
+            return ResponseEntity.ok(comments);
+        } catch (CommentServiceException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+
+    }
+
+    @GetMapping("/getCommentsByID")
+    public ResponseEntity<Optional<Comment>> getCommentByID(@RequestParam Long id) {
+        try {
+            Optional<Comment> comments = commentService.getComment(id);
+            return ResponseEntity.ok(comments);
+        } catch (CommentServiceException e) {
+            return ResponseEntity.badRequest().body(null);
+
+        }
+    }
+
     /**
      * Return the movie in JSON format
      * 
@@ -54,30 +92,26 @@ public class MSFilmRestController {
      * @return JSON of the actor Movie
      */
     @GetMapping("/getMovieAsJSON")
-    public Film getMethodName(@RequestParam String name) {
+    public ResponseEntity<Actor> getMethodName(@RequestParam String name) {
         try {
             Actor filmAsActor = filmManager.getExactFilm(name);
-            Film film = (Film) filmAsActor;
-            return film;
+            return ResponseEntity.ok(filmAsActor);
         } catch (Exception e) {
-            return null;
+            return ResponseEntity.internalServerError().body(null);
         }
     }
 
-    @GetMapping("/getSearchResultAsJSON")
-    public HashSet<Actor> getSearchResult(@RequestParam String name) {
+    @GetMapping("/getCompressedFilm")
+    public ResponseEntity<HashSet<Actor>> getCompressedfilm(@RequestParam String name, @RequestParam int page) {
         try {
-            filmManager.getSeachResult(name);
-            ArrayList<Film> searchResult = new ArrayList<>();
-            return filmManager.getAllActors();
-        } catch (Exception e) {
-            return null;
+            HashSet<Actor> actors = cMM.getSearchResult(name, page);
+            return ResponseEntity.ok(actors);
+        } catch (SearchException e) {
+            return ResponseEntity.badRequest().body(null);
+        } catch (Exception f) {
+            f.printStackTrace();
+            return ResponseEntity.internalServerError().body(null);
         }
     }
 
-    @GetMapping("/getComment")
-    public ArrayList<Comment> getComment(@RequestParam Long id) {
-        Optional<Comment> comments = commentService.getComment(id);
-        return null;
-    }
 }

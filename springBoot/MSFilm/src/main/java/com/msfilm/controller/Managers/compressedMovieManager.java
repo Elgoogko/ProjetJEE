@@ -1,38 +1,68 @@
 package com.msfilm.controller.Managers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
+import org.hibernate.id.IntegralDataTypeHolder;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.Exceptions.SearchException;
+import com.actors.Actor;
 import com.actors.ActorManager;
 import com.msfilm.controller.entities.CompressedFilm;
 import com.msfilm.doe.DOE;
 
 @Component
 public class compressedMovieManager extends ActorManager {
+
     @Autowired
-    private static DOE doeInstance;
+    private DOE doeInstance;
     private String lastSearch = "";
-    private int lastPage = 1;
+    private int currentPage = 0;
 
-    public compressedMovieManager(){
-        super(new ActorManager.Builder().autoID(false));
+    public compressedMovieManager() {
+        super(new ActorManager.Builder().autoID(false).maximumNumberOfActors(1000));
     }
 
-    public ArrayList<CompressedFilm> getSearchResult(String filmName, int page) throws Exception{
-        this.lastSearch = filmName;
-        this.lastPage = page;
-        
-        doeInstance.getSearchResult(filmName, page);
-        return null;
-    }
-
-    public ArrayList<CompressedFilm> getNextSearchResult(int page){
-        if(lastSearch.isBlank() || lastSearch.isEmpty()){
-            throw new IllegalArgumentException();
+    /**
+     * Return a list of compressed movie, based on a research and a page
+     * @param filmName Film name 
+     * @param page search page
+     * @return
+     * @throws Exception
+     */
+    public HashSet<Actor> getSearchResult(String filmName, int page) throws Exception {
+        if (page > 100 || page < 1) {
+            throw new SearchException("Can't go higher than 100 pages or less than 1");
+        }
+        if (this.lastSearch.equals(filmName) && this.currentPage == page) {
+            return this.getAllActors();
         }
 
-        return null;
+        this.lastSearch = filmName;
+        this.currentPage = page;
+
+        this.getAllActors().clear();
+
+        @SuppressWarnings("unchecked")
+        JSONArray second = new JSONArray((List<Object>) doeInstance.getSearchResult(filmName, page).get("Search"));
+
+        for (int i = 0; i <= second.length() - 1; i++) {
+            JSONObject temp = second.getJSONObject(i);
+            CompressedFilm film = new CompressedFilm(
+                    temp.optString("Title", ""),
+                    temp.optInt("Year", 0),
+                    temp.optString("Poster", ""),
+                    temp.optString("imdbID", ""));
+            this.addActor(film);
+        }
+        return this.getAllActors();
     }
 }

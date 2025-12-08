@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.Map;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
@@ -16,6 +15,7 @@ public class DOE {
 
     /**
      * Tests the connection to a given URL.
+     * 
      * @param link The URL to test.
      * @return true if the connection is successful, false otherwise.
      * @throws Exception If the connection fails.
@@ -24,7 +24,7 @@ public class DOE {
         if (link == null || link.trim().isEmpty()) {
             throw new IllegalArgumentException("Link can't be empty to test connection");
         }
-        try{
+        try {
             URL url = new URL(link);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
@@ -33,16 +33,17 @@ public class DOE {
             int statusCode = connection.getResponseCode();
             connection.disconnect();
             return statusCode == 200;
-        } catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
 
     /**
      * Constructs the URL for the OMDB API based on the search type and parameters.
+     * 
      * @param filmName The film name or ID.
-     * @param t The search type (ID, EXACT_NAME, APPX_SEARCH).
-     * @param page The page number for approximate search (optional).
+     * @param t        The search type (ID, EXACT_NAME, APPX_SEARCH).
+     * @param page     The page number for approximate search (optional).
      * @return The constructed URL.
      */
     private String constructUrl(String filmName, searchType t, int... page) {
@@ -69,6 +70,7 @@ public class DOE {
 
     /**
      * Reads the JSON response from the HTTP connection.
+     * 
      * @param conn The HTTP connection.
      * @return The JSON response as a StringBuilder.
      * @throws Exception If an error occurs while reading the response.
@@ -86,21 +88,19 @@ public class DOE {
 
     /**
      * Parses the JSON string into a Map.
+     * 
      * @param jsonData The JSON string.
      * @return The parsed Map.
      * @throws Exception If an error occurs while parsing the JSON.
      */
     private Map<String, Object> parseJson(StringBuilder jsonData) throws Exception {
         JSONObject jsonObject = new JSONObject(jsonData.toString());
-        Map<String, Object> jsonMap = new HashMap<>();
-        for (String key : jsonObject.keySet()) {
-            jsonMap.put(key, jsonObject.get(key));
-        }
-        return jsonMap;
+        return jsonObject.toMap();
     }
 
     /**
      * Uses the OMDB API to fetch data.
+     * 
      * @param url The URL to fetch data from.
      * @return The parsed Map from the JSON response.
      * @throws Exception If an error occurs while fetching or parsing data.
@@ -118,8 +118,9 @@ public class DOE {
 
     /**
      * Fetches a film by its exact name or ID.
+     * 
      * @param filmName The film name or ID.
-     * @param t The search type (ID or EXACT_NAME).
+     * @param t        The search type (ID or EXACT_NAME).
      * @return The film data as a Map.
      * @throws Exception If an error occurs.
      */
@@ -132,17 +133,18 @@ public class DOE {
 
     /**
      * Fetches a list of films based on an approximate search.
+     * 
      * @param filmName The approximate film name.
-     * @param page The page number (must be > 1).
+     * @param page     The page number (must be > 1).
      * @return The search results as a Map.
      * @throws Exception If an error occurs.
      */
-    public Map<String, Object> getSearchResult(String filmName, int page)  throws Exception{
+    public Map<String, Object> getSearchResult(String filmName, int page) throws Exception {
         if (filmName == null || filmName.trim().isEmpty()) {
             throw new IllegalArgumentException("Le nom du film ne peut pas être null ou vide.");
         }
-        if (page <= 1) {
-            throw new IllegalArgumentException("La page ne peut pas être <= 1");
+        if (page < 1 || page > 100) {
+            throw new IllegalArgumentException("La page ne peut pas être < 0");
         }
         return useAPI(new URL(constructUrl(filmName, searchType.APPX_SEARCH, page)));
     }

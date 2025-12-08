@@ -17,6 +17,16 @@ import com.exceptions.ActorException;
  */
 public class Actor {
 
+    private Status status;
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     /**
      * Unique ID of each actors choosen by the actor manager
      */

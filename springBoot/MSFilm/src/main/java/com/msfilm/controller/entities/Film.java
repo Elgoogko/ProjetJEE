@@ -3,6 +3,7 @@ package com.msfilm.controller.entities;
 import java.util.Map;
 
 import com.actors.Actor;
+import com.actors.Status;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -10,16 +11,15 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 public class Film extends Actor {
     /**
-     * Movie Score : ratings based on our own data base (not imdb score provided in the data)
+     * Movie Score : ratings based on our own data base (not imdb score provided in
+     * the data)
      */
     @NotNull
     @Min(0)
@@ -33,9 +33,16 @@ public class Film extends Actor {
     @NotNull(message = "Données invalides !")
     private Map<String, Object> moviedata;
 
+    public Film() {
+        this.setLifetime(25000);
+        this.setID((String) this.getMoviedata().get("imdbID"));
+        this.setStatus(Status.ALIVE);
+    }
+
     @Override
-    public String toString(){
-        return "Film id: "+this.getId()+"; \nTitle: "+moviedata.get("Title")+"; \nDesc.: "+moviedata.get("Description")+"; Score : "+this.score;
+    public String toString() {
+        return "Film id: " + this.getId() + "; \nTitle: " + moviedata.get("Title") + "; \nDesc.: "
+                + moviedata.get("Description") + "; Score : " + this.score;
     }
 
 }

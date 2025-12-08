@@ -41,10 +41,9 @@ public class Comment {
     private String comment;
 
     @Column(name = "score", nullable = false)
-    @NotBlank(message = "Un score est obligatoire sinon on poste pas de commentaire")
     @NotNull(message = "le score doit être un flottant !")
-    @Min(value = 0, message = "le score doit être strictement positif")
-    @Max(value = 5, message = "LE score doit être compris entre 0 et 5")
+    @Min(value = 0, message = "Le score doit être strictement positif")
+    @Max(value = 5, message = "Le score doit être compris entre 0 et 5")
     private double score;
 
     @Column(name = "date", nullable = false)

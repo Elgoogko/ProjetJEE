@@ -1,6 +1,7 @@
 package com.msfilm.controller.entities;
 
 import com.actors.Actor;
+import com.actors.Status;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -14,9 +15,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
 public class CompressedFilm extends Actor {
-    
+
     @NotBlank
     @NotEmpty
     @NotNull
@@ -24,14 +24,25 @@ public class CompressedFilm extends Actor {
 
     @Min(0)
     private int releasetYear;
-    
+
     @NotBlank
     @NotEmpty
     @NotNull
     private String linkToPoster;
-    
+
     @NotBlank
     @NotEmpty
     @NotNull
     private String imdbID;
+
+    public CompressedFilm() {
+        this.setID(imdbID);
+        this.setStatus(Status.STANDBY);
+    }
+
+    @Override
+    public String toString() {
+        return "CompressedFilm [title=" + title + ", releasetYear=" + releasetYear + ", linkToPoster=" + linkToPoster
+                + ", imdbID=" + imdbID + "]";
+    }
 }

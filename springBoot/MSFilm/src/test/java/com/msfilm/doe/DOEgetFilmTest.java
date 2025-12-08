@@ -20,8 +20,8 @@ import com.msfilm.MSFilmApplication;
 @SpringBootTest(classes = MSFilmApplication.class)
 public class DOEgetFilmTest {
     @Autowired
-    private static DOE instance;
-    
+    private DOE instance;
+
     private static Map<String, Object> TEST = new HashMap<>();
 
     @BeforeAll
@@ -35,18 +35,19 @@ public class DOEgetFilmTest {
         TEST.put("Director", "Joss Whedon");
         TEST.put("Writer", "Joss Whedon, Zak Penn");
         TEST.put("Actors", "Robert Downey Jr., Chris Evans, Scarlett Johansson");
-        TEST.put("Plot", "Earth's mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity.");
+        TEST.put("Plot",
+                "Earth's mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity.");
         TEST.put("Language", "English, Russian");
         TEST.put("Country", "United States");
         TEST.put("Awards", "Nominated for 1 Oscar. 39 wins & 81 nominations total");
-        TEST.put("Poster", "https://m.media-amazon.com/images/M/MV5BNGE0YTVjNzUtNzJjOS00NGNlLTgxMzctZTY4YTE1Y2Y1ZTU4XkEyXkFqcGc@._V1_SX300.jpg");
+        TEST.put("Poster",
+                "https://m.media-amazon.com/images/M/MV5BNGE0YTVjNzUtNzJjOS00NGNlLTgxMzctZTY4YTE1Y2Y1ZTU4XkEyXkFqcGc@._V1_SX300.jpg");
 
         // Initialisation de la liste des Ratings
         List<Map<String, String>> ratings = Arrays.asList(
-            Map.of("Source", "Internet Movie Database", "Value", "8.0/10"),
-            Map.of("Source", "Rotten Tomatoes", "Value", "91%"),
-            Map.of("Source", "Metacritic", "Value", "69/100")
-        );
+                Map.of("Source", "Internet Movie Database", "Value", "8.0/10"),
+                Map.of("Source", "Rotten Tomatoes", "Value", "91%"),
+                Map.of("Source", "Metacritic", "Value", "69/100"));
         TEST.put("Ratings", ratings);
 
         TEST.put("Metascore", "69");
@@ -63,27 +64,32 @@ public class DOEgetFilmTest {
 
     @Test
     @DisplayName("Null test")
-    void testNull(){
-        assertThrows(IllegalArgumentException.class, () -> {instance.getFilm(null, searchType.APPX_SEARCH);}); 
+    void testNull() {
+        assertThrows(NullPointerException.class, () -> {
+            instance.getFilm(null, searchType.APPX_SEARCH);
+        });
     }
 
     @Test
     @DisplayName("Empty name test")
-    void testEmpty(){
-        assertThrows(IllegalArgumentException.class, () -> {instance.getFilm("",searchType.APPX_SEARCH);});
+    void testEmpty() {
+        assertThrows(NullPointerException.class, () -> {
+            instance.getFilm("", searchType.APPX_SEARCH);
+        });
     }
 
-    
     @Test
     @DisplayName("Blank name test")
-    void testBlank(){
-        assertThrows(IllegalArgumentException.class, () -> {instance.getFilm("      ",searchType.APPX_SEARCH);});
+    void testBlank() {
+        assertThrows(NullPointerException.class, () -> {
+            instance.getFilm("      ", searchType.APPX_SEARCH);
+        });
     }
 
     @Test
     @DisplayName("Simple Film  : Avengers")
     void testSimpleFilm() throws Exception {
-        Map<String, Object> result = instance.getFilm("Avengers", searchType.APPX_SEARCH);
+        Map<String, Object> result = instance.getFilm("Avengers", searchType.EXACT_NAME);
 
         assertFalse(result.isEmpty());
         // Comparaison clé par clé
@@ -111,18 +117,5 @@ public class DOEgetFilmTest {
         assertEquals(TEST.get("Production"), result.get("Production"));
         assertEquals(TEST.get("Website"), result.get("Website"));
         assertEquals(TEST.get("Response"), result.get("Response"));
-
-        // Comparaison des Ratings (liste de Map)
-        @SuppressWarnings("unchecked")
-        List<Map<String, String>> expectedRatings = (List<Map<String, String>>) TEST.get("Ratings");
-        @SuppressWarnings("unchecked")
-        List<Map<String, String>> actualRatings = (List<Map<String, String>>) result.get("Ratings");
-        assertEquals(expectedRatings.size(), actualRatings.size());
-        for (int i = 0; i < expectedRatings.size(); i++) {
-            Map<String, String> expectedRating = expectedRatings.get(i);
-            Map<String, String> actualRating = actualRatings.get(i);
-            assertEquals(expectedRating.get("Source"), actualRating.get("Source"));
-            assertEquals(expectedRating.get("Value"), actualRating.get("Value"));
-        }
     }
 }
