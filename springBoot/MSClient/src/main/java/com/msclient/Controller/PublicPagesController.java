@@ -44,7 +44,9 @@ public class PublicPagesController {
     }
 
     @RequestMapping("home")
-    public String getIndex() {
+    public String getIndex(Principal principal) {
+        //UserAsActor u = new UserAsActor();
+        //userManager.addActor(u);
         return "pages/home";
     }
 
