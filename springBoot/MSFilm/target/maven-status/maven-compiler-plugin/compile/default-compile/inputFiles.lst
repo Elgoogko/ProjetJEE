@@ -1,0 +1,15 @@
+/home/lyxorl/Documents/CYTech/ING2/S1/JEE/Projet/ProjetJEE/springBoot/MSFilm/src/main/java/com/msfilm/controller/Managers/MovieManager.java
+/home/lyxorl/Documents/CYTech/ING2/S1/JEE/Projet/ProjetJEE/springBoot/MSFilm/src/main/java/com/msfilm/MSFilmApplication.java
+/home/lyxorl/Documents/CYTech/ING2/S1/JEE/Projet/ProjetJEE/springBoot/MSFilm/src/main/java/com/msfilm/controller/entities/CompressedFilm.java
+/home/lyxorl/Documents/CYTech/ING2/S1/JEE/Projet/ProjetJEE/springBoot/MSFilm/src/main/java/com/msfilm/controller/entities/Comment.java
+/home/lyxorl/Documents/CYTech/ING2/S1/JEE/Projet/ProjetJEE/springBoot/MSFilm/src/main/java/com/msfilm/controller/Managers/CommentManager.java
+/home/lyxorl/Documents/CYTech/ING2/S1/JEE/Projet/ProjetJEE/springBoot/MSFilm/src/main/java/com/msfilm/doe/DOE.java
+/home/lyxorl/Documents/CYTech/ING2/S1/JEE/Projet/ProjetJEE/springBoot/MSFilm/src/main/java/com/msfilm/controller/entities/Film.java
+/home/lyxorl/Documents/CYTech/ING2/S1/JEE/Projet/ProjetJEE/springBoot/MSFilm/src/main/java/com/Exceptions/CommentServiceException.java
+/home/lyxorl/Documents/CYTech/ING2/S1/JEE/Projet/ProjetJEE/springBoot/MSFilm/src/main/java/com/Exceptions/SearchException.java
+/home/lyxorl/Documents/CYTech/ING2/S1/JEE/Projet/ProjetJEE/springBoot/MSFilm/src/main/java/com/msfilm/doe/searchType.java
+/home/lyxorl/Documents/CYTech/ING2/S1/JEE/Projet/ProjetJEE/springBoot/MSFilm/src/main/java/com/msfilm/services/CommentService.java
+/home/lyxorl/Documents/CYTech/ING2/S1/JEE/Projet/ProjetJEE/springBoot/MSFilm/src/main/java/com/msfilm/controller/MSFilmController.java
+/home/lyxorl/Documents/CYTech/ING2/S1/JEE/Projet/ProjetJEE/springBoot/MSFilm/src/main/java/com/msfilm/MSFilmRestController.java
+/home/lyxorl/Documents/CYTech/ING2/S1/JEE/Projet/ProjetJEE/springBoot/MSFilm/src/main/java/com/msfilm/services/CommentRepository.java
+/home/lyxorl/Documents/CYTech/ING2/S1/JEE/Projet/ProjetJEE/springBoot/MSFilm/src/main/java/com/msfilm/controller/Managers/compressedMovieManager.java

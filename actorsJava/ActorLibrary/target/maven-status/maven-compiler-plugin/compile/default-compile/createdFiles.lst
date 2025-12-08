@@ -1,7 +1,7 @@
-com\actors\ActorManager.class
-com\exceptions\ActorException.class
-com\actors\Actor.class
-com\actors\Status.class
-com\actors\ActorManager$Builder.class
-com\actors\MessageDTO.class
-com\exceptions\ActorManagerException.class
+com/exceptions/ActorException.class
+com/actors/MessageDTO.class
+com/exceptions/ActorManagerException.class
+com/actors/ActorManager.class
+com/actors/Actor.class
+com/actors/Status.class
+com/actors/ActorManager$Builder.class

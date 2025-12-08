@@ -1,0 +1,16 @@
+com/msfilm/controller/Managers/compressedMovieManager.class
+com/msfilm/controller/Managers/CommentManager.class
+com/msfilm/doe/searchType.class
+com/msfilm/services/CommentRepository.class
+com/msfilm/controller/entities/Comment.class
+com/msfilm/services/CommentService.class
+com/msfilm/controller/MSFilmController.class
+com/msfilm/controller/entities/Film.class
+com/Exceptions/SearchException.class
+com/msfilm/doe/DOE.class
+com/msfilm/MSFilmApplication.class
+com/msfilm/doe/DOE$1.class
+com/Exceptions/CommentServiceException.class
+com/msfilm/controller/entities/CompressedFilm.class
+com/msfilm/controller/Managers/MovieManager.class
+com/msfilm/MSFilmRestController.class

@@ -60,59 +60,6 @@ public class ActorManager {
     }
 
 
-    private PrintWriter writer;
-    private boolean logsActives = true;
-
-    /**
-     * Open log file and be ready to write in
-     * @param nameClass Name at the start of the log file
-     */
-    public void initializeLogs(String nameClass){
-
-        if (!logsActives) return;
-    
-        try {
-
-            String timestamp = LocalDateTime.now().format(
-                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-            );
-            FileWriter fileWriter = new FileWriter(nameClass+timestamp, true);
-            writer = new PrintWriter(fileWriter);
-            
-        } catch (IOException e) {
-            System.err.println("Error when open log file : " + e.getMessage());
-            logsActives = false; // Désactive les logs en cas d'erreur
-        }
-    }
-
-    /**
-     * Write in log file
-     * @param message to put in log file
-     */
-    public void writeLog(String message) {
-        if (!logsActives || writer == null) return;
-        
-        try {
-            String timestamp = LocalDateTime.now().format(
-                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-            );
-            writer.println("[" + timestamp + "] " + message);
-            writer.flush();
-            
-        } catch (Exception e) {
-            System.err.println("Erreur when writting logs: " + e.getMessage());
-        }
-    }
-
-    /**
-     * close log at the end of the actor
-     */
-    public void closeLogs() {
-        if (writer != null) {
-            writer.close();
-        }
-    }
-
     /**
      * Create a new unique ID used by the next actors according to the actors
      * currently up
@@ -158,6 +105,8 @@ public class ActorManager {
         if (isAutoID()) {
             a.setID(getUniqueID());
         }
+        a.initializeLogs("Actor");
+        a.writeLog("Actor Created with id :" + a.getId());
         a.setReference(this);
         return this.actors.add(a);
     }
@@ -184,6 +133,7 @@ public class ActorManager {
      * @param a Actor instance
      */
     public boolean deleteActor(Actor a) {
+        a.closeLogs();
         return this.actors.remove(a);
     }
 
@@ -193,6 +143,8 @@ public class ActorManager {
      * @param id Actor ID
      */
     public void deleteActor(String id) {
+        getActorByID(id).writeLog("Supression actor :"+id);
+        getActorByID(id).closeLogs();
         this.actors.remove(getActorByID(id));
     }
 
@@ -204,6 +156,8 @@ public class ActorManager {
      * @param actDest   ID of destination actor
      */
     public void transfertToActor(JSONObject message, String actSource, String actDest) {
+        getActorByID(actSource).writeLog("'"+actSource+"' envoie a '"+actDest+"' : "+message.toString());
+        getActorByID(actSource).writeLog("'"+actDest+"' recoie de '"+actSource+"' : "+message.toString());
         this.getActorByID(actSource).receive(message, actDest);
     }
 
@@ -236,6 +190,8 @@ public class ActorManager {
         Actor dest = getActorByID(dto.receiverId);
 
         if (dest != null) {
+            getActorByID(dto.senderId).writeLog("'"+dto.senderId+"' envoie a '"+dest.getId()+"' : "+dto.message.toString());
+            dest.writeLog("'"+dest.getId()+"' recoie de '"+dto.senderId+"' : "+dto.message.toString());
             dest.receive(dto.message, dto.senderId);
         }
         else{
