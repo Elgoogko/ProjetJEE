@@ -101,7 +101,8 @@ Dans le pom.xml, il faut mettre :
 	</dependency>
 ```
 
-Ensuite, il faut exécuter les commandes suivantes dans le dossier actorsManager
+Ensuite, il faut exécuter les commandes suivantes dans le dossier actorsJava
+
 Sur Linux : 
 ```bash
 ./compileLibrary.sh
